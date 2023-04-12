@@ -129,6 +129,10 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\OneDrive\School_Docs\MSIM Classes\MSIM331_Simulation_Software_Design\Homework 3\SimulationExecutive\HW3Test\Distribution.h" />
+    <ClInclude Include="Computer.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
