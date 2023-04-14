@@ -127,11 +127,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Distribution.cpp" />
+    <ClCompile Include="EventSet.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="SimulationExecutive.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\OneDrive\School_Docs\MSIM Classes\MSIM331_Simulation_Software_Design\Homework 3\SimulationExecutive\HW3Test\Distribution.h" />
     <ClInclude Include="Computer.h" />
+    <ClInclude Include="Distribution.h" />
+    <ClInclude Include="EventSet.h" />
+    <ClInclude Include="SimulationExecutive.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
