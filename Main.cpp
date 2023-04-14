@@ -1,4 +1,7 @@
-/*************************/
+#include "Computer.h"
+#include "Distribution.h"
+#include "EventSet.h"
+#include "SimulationExecutive.h"
 
 
 int main() {
