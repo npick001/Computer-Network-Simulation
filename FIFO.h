@@ -9,7 +9,7 @@ template <class T>
 class FIFO
 {
 public:
-	FIFO(string name)
+	FIFO(std::string name)
 	{
 		_head = 0;
 		_tail = 0;
