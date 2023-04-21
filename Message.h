@@ -1,4 +1,5 @@
 #pragma once
+#include "Stats.h"
 #include "Computer.h"
 
 class Message
@@ -15,6 +16,7 @@ private:
 	Time _destinationTime;
 	Time _waitTime;
 
+	StatContainer* _stats;
 	int _timesStopped; // number of wait times
 };
 
