@@ -41,7 +41,7 @@ public:
 	Time GetTime()
 	{
 		int index = GetIndex(_simTime);
-		 
+
 		// check all bins if they have an event, starting at this bin
 		for (int i = index; i < _numBins + index; i++) {
 			i = i % _numBins;
@@ -85,7 +85,7 @@ public:
 			delete _calQueue[i];
 		}
 		_numBins = numBins;
-		
+
 		// after changing number of bins, delete set and create new.
 		delete[] _calQueue;
 		_calQueue = new EventList * [_numBins];
@@ -192,9 +192,9 @@ void SimulationExecutive::InitializeSimulation()
 	_eventSet = SimulationExecutive::EventSet();
 }
 
-Time SimulationExecutive::GetSimulationTime() 
-{ 
-	return _simTime; 
+Time SimulationExecutive::GetSimulationTime()
+{
+	return _simTime;
 }
 
 void SimulationExecutive::RunSimulation()

@@ -10,8 +10,6 @@
 
 Computer* Network::_computerNetwork = 0;
 
-Network::Network() {}
-
 void Network::ReadFile(std::string filename) {
     try {
         parseGraphFromFile(filename);
@@ -60,13 +58,18 @@ void Network::read_edges(std::istream& in, int num_edges, std::vector<int>& edge
 }
 
 
-
 void Network::read_triangular(std::istream& in, double& min, double& mode, double& max) {
     char ch;
     in >> min >> ch >> mode >> ch >> max;
 
     if (ch != ',') {
         throw std::runtime_error("Invalid triangular distribution format");
+    }
+}
+
+void Network::read_exponential(std::istream& in, double& rate) {
+    if (!(in >> rate) || rate <= 0) {
+        throw std::runtime_error("Invalid exponential distribution format");
     }
 }
 

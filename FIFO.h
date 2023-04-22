@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+#include "SimulationExecutive.h"
 
 /**************************
 
@@ -26,9 +28,9 @@ public:
 		else {
 			_tail = _tail->next = node;
 		}
-		std::cout << GetCurrentSimTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+	//	std::cout << GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
-		std::cout << GetCurrentSimTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+	//	std::cout << GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 	}
 
 	T* GetEntity()
@@ -39,9 +41,9 @@ public:
 			T* t = _head->t;
 			_head = _head->next;
 			//			delete n;
-			std::cout << GetCurrentSimTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+//			std::cout << GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
-			std::cout << GetCurrentSimTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+		//	std::cout << GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			return t;
 		}
 	}

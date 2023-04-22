@@ -59,7 +59,8 @@ void Computer::ArriveEM(Message* message) {
 
     _serviceQueue->AddEntity(message);
     if (_available) {
-        SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
+//        SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
+    std::cout <<"stuff";
     }
 }
 
@@ -81,7 +82,7 @@ void Computer::StartServiceEM() {
 
     _available = false;
 
-    SimulationExecutive::ScheduleEventIn(_genRate->GetRV(), new DoneServiceEA(this, _serviceQueue->GetEntity()));
+    //SimulationExecutive::ScheduleEventIn(_genRate->GetRV(), new DoneServiceEA(this, _serviceQueue->GetEntity()));
 }
 class Computer::DoneServiceEA : public EventAction
 {

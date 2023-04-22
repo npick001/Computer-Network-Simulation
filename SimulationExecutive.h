@@ -37,13 +37,13 @@ public:
 	advancing time, the set of registered conditional events are each evaluated
 	and should their condition be met, their event action is executed.
 	*/
-	
+
 	static void RunSimulation(Time endTime);
 	/*
 	Behavior - Identical to the above behavior except that the simulation will
 	also terminate if (simulation time > endTime).
 	*/
-	
+
 	static void ScheduleEventIn(Time delta, EventAction *ea);
 	/*
 	Behavior - Scheduled the event action ea to be executed when the simulation
