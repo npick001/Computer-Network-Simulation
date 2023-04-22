@@ -5,14 +5,14 @@
 class StatContainer
 {
 public:
-	StatContainer();
-	void EnterN();
-	void LeaveN();
-	void EnterQ();
-	void LeaveQ();
+    StatContainer();
+    void EnterN();
+    void LeaveN();
+    void EnterQ();
+    void LeaveQ();
 
 private:
-	Time _start, _end, _enterQ, _exitQ;
-	std::list<Time> _TinNode;
-	std::list<Time> _QueueT;
+    Time _start, _end, _enterN, _exitN, _enterQ, _exitQ;
+    std::list<Time> _TinNode;
+    std::list<Time> _QueueT;
 };
