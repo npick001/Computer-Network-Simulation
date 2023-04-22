@@ -7,10 +7,17 @@
 #include <string>
 #include <stdexcept>
 #include <queue>
+#ifdef _WIN32
+#define NETWORK_API __declspec(dllexport)
+#else
+#define NETWORK_API
+#endif
+
 
 Computer* Network::_computerNetwork = 0;
 
-void Network::ReadFile(std::string filename) {
+
+NETWORK_API void Network::ReadFile(std::string filename) {
     try {
         parseGraphFromFile(filename);
         print_graph(*this);
@@ -19,7 +26,7 @@ void Network::ReadFile(std::string filename) {
     }
 }
 
-int Network::GetEdgeWeight(Computer* computer) {
+NETWORK_API int Network::GetEdgeWeight(Computer* computer) {
     return computer->GetQueueSize();
 }
 
@@ -154,7 +161,7 @@ void Network::print_shortest_path_distances(const std::vector<int>& dist) {
     }
 }
 
-void Network::equal_weight_dijkstra(int source) {
+NETWORK_API void Network::equal_weight_dijkstra(int source) {
     const int num_nodes = nodes.size();
     std::vector<int> dist(num_nodes, std::numeric_limits<int>::max());
     std::vector<bool> visited(num_nodes, false);
