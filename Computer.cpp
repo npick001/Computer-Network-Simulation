@@ -1,7 +1,7 @@
 #include "Computer.h"
 
-Computer::Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges)
-    : serviceTimeDist(serviceTimeDist), msgGenRateDist(msgGenRateDist), edges(edges)
+Computer::Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges, int id)
+    : serviceTimeDist(serviceTimeDist), msgGenRateDist(msgGenRateDist), edges(edges), _id(id)
 {
     _connectedEdges = 0;
     _serviceQueue = new FIFO<Message>("Service Queue");

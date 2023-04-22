@@ -14,7 +14,9 @@ public:
     int GetEdgeWeight(Computer* computer);
     void addNode(const Computer& node);
     void parseGraphFromFile(const std::string& filename);
-	void equal_weight_dijkstra(int source);
+	std::vector<int>equal_weight_dijkstra(int source);
+	std::vector<int>getShortestPath(int source, int destination, const std::vector<int>& prev);
+	void routeMessage(Message* message);
 
 private:
 	static Computer* _computerNetwork;

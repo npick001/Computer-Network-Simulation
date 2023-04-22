@@ -7,8 +7,11 @@
 #include <string>
 #include <stdexcept>
 #include <queue>
+#include "Message.h"
+#include <algorithm>
 
 Computer* Network::_computerNetwork = 0;
+
 
 void Network::ReadFile(std::string filename) {
     try {
@@ -109,7 +112,7 @@ void Network::parseGraphFromFile(const std::string& filename) {
 
         Triangular serviceTimeDist(min, mode, max);
         Exponential msgGenRateDist(msg_gen_rate);
-        Computer computer(serviceTimeDist, msgGenRateDist, edges);
+        Computer computer(serviceTimeDist, msgGenRateDist, edges, 1);
         addNode(computer);
     }
 
@@ -120,26 +123,6 @@ void Network::parseGraphFromFile(const std::string& filename) {
 
     file.close();
 }
-
-
-
-
-
-// int Computer::find_next_node(const std::vector<int>& dist, const std::vector<Computer>& nodes) {
-//     int next_node = -1;
-//     int min_cost = std::numeric_limits<int>::max();
-
-//     for (int v : edges) {
-//         int cost = dist[v] + nodes[v].GetExpectedCost();
-
-//         if (cost < min_cost) {
-//             min_cost = cost;
-//             next_node = v;
-//         }
-//     }
-
-//     return next_node;
-// }
 
 
 void Network::print_shortest_path_distances(const std::vector<int>& dist) {
@@ -154,9 +137,10 @@ void Network::print_shortest_path_distances(const std::vector<int>& dist) {
     }
 }
 
-void Network::equal_weight_dijkstra(int source) {
+std::vector<int> Network::equal_weight_dijkstra(int source) {
     const int num_nodes = nodes.size();
     std::vector<int> dist(num_nodes, std::numeric_limits<int>::max());
+    std::vector<int> prev(num_nodes, -1);
     std::vector<bool> visited(num_nodes, false);
 
     dist[source] = 0;
@@ -177,12 +161,53 @@ void Network::equal_weight_dijkstra(int source) {
 
             if (alt < dist[v]) {
                 dist[v] = alt;
+                prev[v] = u;
                 q.push(v);
             }
         }
     }
 
-    print_shortest_path_distances(dist);
+    return prev;
+}
+
+std::vector<int> Network::getShortestPath(int source, int destination, const std::vector<int>& prev) {
+    std::vector<int> path;
+    int current = destination;
+
+    while (current != source && current != -1) {
+        path.push_back(current);
+        current = prev[current];
+    }
+
+    if (current == source) {
+        path.push_back(source);
+    } else {
+        path.clear(); // No path exists
+    }
+
+    std::reverse(path.begin(), path.end());
+    return path;
+}
+
+//use the shortest path for routing
+void Network::routeMessage(Message* message) {
+    int source = message->getSource()->getId(); // Extract integer ID from Computer object
+    int destination = message->getDestination()->getId(); // Extract integer ID from Computer object
+
+    std::vector<int> prev = equal_weight_dijkstra(source);
+    std::vector<int> path = getShortestPath(source, destination, prev);
+
+    // Perform the actual routing by iterating through the path
+    if (!path.empty()) {
+        for (size_t i = 0; i < path.size() - 1; ++i) {
+            int currentNode = path[i];
+            int nextNode = path[i + 1];
+
+            std::cout << "Routing message from node " << currentNode << " to node " << nextNode << std::endl;
+        }
+    } else {
+        std::cout << "No path exists between node " << source << " and node " << destination << std::endl;
+    }
 }
 
 
@@ -205,5 +230,4 @@ void Network::print_graph(const Network& _computerNetwork) {
         std::cout << std::endl;
     }
 }
-
 
