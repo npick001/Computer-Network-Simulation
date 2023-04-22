@@ -4,26 +4,30 @@
 #include "Message.h"
 #include "SimulationExecutive.h"
 
-class Computer 
+class Computer
 {
 public:
-	Computer(Distribution* generationRate);
-	int GetQueueSize();
-	void ReportStatistics();
+    Triangular serviceTimeDist;
+    Exponential msgGenRateDist;
+    std::vector<int> edges;
+
+    Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges);
+    int GetQueueSize();
+    void ReportStatistics();
+    int find_next_node(const std::vector<int>& dist, const std::vector<Computer>& nodes);
+    double GetExpectedCost();
+
 private:
-	Computer* _connectedEdges;
-	FIFO<Message>* _serviceQueue;
-	bool _available;
-
-	Distribution* _genRate;
-
-	class GenerateMessageEA;
-	void GenerateMessageEM();
-	class ArriveEA;
-	void ArriveEM(Message* message);
-	class StartServiceEA;
-	void StartServiceEM();
-	class DoneServiceEA;
-	void DoneServiceEM(Message* message);
-
+    Computer* _connectedEdges;
+    FIFO<Message>* _serviceQueue;
+    bool _available;
+    Distribution* _genRate;
+    class GenerateMessageEA;
+    void GenerateMessageEM();
+    class ArriveEA;
+    void ArriveEM(Message* message);
+    class StartServiceEA;
+    void StartServiceEM();
+    class DoneServiceEA;
+    void DoneServiceEM(Message* message);
 };

@@ -1,16 +1,16 @@
 #include "Computer.h"
 
-Computer::Computer(Distribution* generationRate)
+Computer::Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges)
+    : serviceTimeDist(serviceTimeDist), msgGenRateDist(msgGenRateDist), edges(edges)
 {
-	_connectedEdges = 0;
-	_serviceQueue = new FIFO<Message>("Service Queue");
-	_isAvailable = true;
-	_genRate = generationRate;
+    _connectedEdges = 0;
+    _serviceQueue = new FIFO<Message>("Service Queue");
+    _available = true;
+    _genRate = &msgGenRateDist;
 }
 
-int Computer::GetQueueSize()
-{
-	return _serviceQueue->GetSize();
+int Computer::GetQueueSize() {
+    return _serviceQueue->GetSize();
 }
 
 void Computer::ReportStatistics()
@@ -20,90 +20,90 @@ void Computer::ReportStatistics()
 class Computer::GenerateMessageEA : public EventAction
 {
 public:
-	GenerateMessageEA(Computer* c) {
-		_c = c;
-	}
+    GenerateMessageEA(Computer* c) {
+        _c = c;
+    }
 
-	void Execute() {
-		_c->GenerateMessageEM();
-	}
+    void Execute() {
+        _c->GenerateMessageEM();
+    }
 private:
-	Computer* _c;
+    Computer* _c;
 };
 void Computer::GenerateMessageEM()
 {
-	Time genTime = _genRate->GetRV();
+    Time genTime = _genRate->GetRV();
 
-	// send to right place
+    // send to right place
 
-
-	SimulationExecutive::ScheduleEventIn(genTime, new GenerateMessageEA(this));
+    SimulationExecutive::ScheduleEventIn(genTime, new GenerateMessageEA(this));
 };
 
 class Computer::ArriveEA : public EventAction
 {
 public:
-	ArriveEA(Computer* c, Message* m) {
-		_c = c;
-		_m = m;
-	}
+    ArriveEA(Computer* c, Message* m) {
+        _c = c;
+        _m = m;
+    }
 
-	void Execute() {
-		_c->ArriveEM(_m);
-	}
+    void Execute() {
+        _c->ArriveEM(_m);
+    }
 private:
-	Computer* _c;
-	Message* _m;
+    Computer* _c;
+    Message* _m;
 };
 
 void Computer::ArriveEM(Message* message) {
 
-	_serviceQueue->AddEntity(message);
-	if (_available) {
-		SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
-	}
+    _serviceQueue->AddEntity(message);
+    if (_available) {
+//        SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
+    std::cout <<"stuff";
+    }
 }
 
 class Computer::StartServiceEA : public EventAction
 {
 public:
-	StartServiceEA(Computer* c) {
-		_c = c;
-	}
+    StartServiceEA(Computer* c) {
+        _c = c;
+    }
 
-	void Execute() {
-		_c->StartServiceEM();
-	}
+    void Execute() {
+        _c->StartServiceEM();
+    }
 private:
-	Computer* _c;
-	
+    Computer* _c;
+
 };
 void Computer::StartServiceEM() {
 
-	_available = false;
+    _available = false;
 
-	SimulationExecutive::ScheduleEventIn(_genRate->GetRV(), new DoneServiceEA(this, _serviceQueue->GetEntity()));
+    //SimulationExecutive::ScheduleEventIn(_genRate->GetRV(), new DoneServiceEA(this, _serviceQueue->GetEntity()));
 }
 class Computer::DoneServiceEA : public EventAction
 {
 public:
-	DoneServiceEA(Computer* c, Message* m) {
-		_c = c;
-		_m = m;
-	}
+    DoneServiceEA(Computer* c, Message* m) {
+        _c = c;
+        _m = m;
+    }
 
-	void Execute() {
-		_c->DoneServiceEM(_m);
-	}
+    void Execute() {
+        _c->DoneServiceEM(_m);
+    }
 private:
-	Computer* _c;
-	Message* _m;
+    Computer* _c;
+    Message* _m;
 };
 void Computer::DoneServiceEM(Message* message) {
 
-	_available = true;
+    _available = true;
 
-	if (_serviceQueue->GetSize() > 0) {
-		SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
-	}
+    if (_serviceQueue->GetSize() > 0) {
+        SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
+    }
 }
