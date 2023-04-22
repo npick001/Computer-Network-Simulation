@@ -10,9 +10,8 @@ int main() {
 
 	Network myNetwork;
 	myNetwork.ReadFile("foo.txt");
-	//myNetwork.equal_weight_dijkstra(0);
-    return 0;
+	myNetwork.equal_weight_dijkstra(0);
 	// Find the shortest path based on the expected cost at each node
-	//myNetwork.dijkstra(0, true);
-
+//	myNetwork.dijkstra(0, true);
+    return 0;
 }
