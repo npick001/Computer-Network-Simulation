@@ -112,7 +112,7 @@ void Network::parseGraphFromFile(const std::string& filename) {
 
         Triangular serviceTimeDist(min, mode, max);
         Exponential msgGenRateDist(msg_gen_rate);
-        Computer computer(serviceTimeDist, msgGenRateDist, edges, 1);
+        Computer computer(serviceTimeDist, msgGenRateDist, edges, 1); //change this id generate later
         addNode(computer);
     }
 
