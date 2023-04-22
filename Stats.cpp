@@ -14,13 +14,3 @@ void StatContainer::LeaveN()
 {
     _exitN = SimulationExecutive::GetSimulationTime();
 }
-
-void StatContainer::EnterQ()
-{
-    _enterQ = SimulationExecutive::GetSimulationTime();
-}
-
-void StatContainer::LeaveQ()
-{
-    _exitQ = SimulationExecutive::GetSimulationTime();
-}

@@ -8,11 +8,9 @@ public:
     StatContainer();
     void EnterN();
     void LeaveN();
-    void EnterQ();
-    void LeaveQ();
 
 private:
-    Time _start, _end, _enterN, _exitN, _enterQ, _exitQ;
+    Time _start, _end, _enterN, _exitN;
     std::list<Time> _TinNode;
     std::list<Time> _QueueT;
 };
