@@ -53,5 +53,5 @@ private:
     int _connectedEdges;
     FIFO<Message>* _serviceQueue;
     bool _available;
-    Network* _computerNetwork;
+    static Network* _computerNetwork;
 };
