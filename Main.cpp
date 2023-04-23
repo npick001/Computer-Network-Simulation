@@ -1,11 +1,24 @@
 #include "Computer.h"
 #include "Distribution.h"
 #include "EventSet.h"
+#include "Network.h"
 #include "SimulationExecutive.h"
 
+using namespace std;
 
 int main() {
-	return 0;
 
-	//test github
+
+	Time endTime = 1000;
+	SimulationExecutive::InitializeSimulation();
+
+	Network network(RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA);
+	network.ReadFile("foo.txt");
+
+	cout << endl << "Simulation Starting..." << endl << endl;
+
+
+	SimulationExecutive::RunSimulation(endTime);
+
+	return 0;
 }

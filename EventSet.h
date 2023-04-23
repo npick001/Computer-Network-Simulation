@@ -13,7 +13,7 @@ public:
 		_size = 0;
 	}
 
-	/* 
+	/*
 		This function uses an insertion sort to add the event
 		at the position in ascending order.
 
@@ -34,7 +34,7 @@ public:
 	void PrintEventSet();
 
 	/*
-		This function returns the event time 
+		This function returns the event time
 		of the first event in the list -> already sorted
 	*/
 	Time GetMinTime();
