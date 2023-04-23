@@ -148,138 +148,86 @@ void Network::print_shortest_path_distances(const std::vector<int>& dist) {
     }
 }
 
+//static pathfinder, gets all paths from a source node
 std::vector<int> Network::equal_weight_dijkstra(int source) {
     const int num_nodes = nodes.size();
     std::vector<int> dist(num_nodes, std::numeric_limits<int>::max());
     std::vector<int> prev(num_nodes, -1);
     std::vector<bool> visited(num_nodes, false);
-
     dist[source] = 0;
     std::queue<int> q;
     q.push(source);
-
     while (!q.empty()) {
         int u = q.front();
         q.pop();
-
         if (visited[u]) continue;
         visited[u] = true;
-
         const Computer& curr_computer = nodes[u];
-
         for (int v : curr_computer.edges) {
             int alt = dist[u] + 1;
-
             if (alt < dist[v]) {
                 dist[v] = alt;
                 prev[v] = u;
                 q.push(v);
+                std::cout << "Equal weight: Node " << u << " connects to Node " << v << std::endl;
             }
         }
     }
-
     return prev;
 }
 
+//pathfinder from one node to another node, extra
 std::vector<int> Network::getShortestPath(int source, int destination, const std::vector<int>& prev) {
     std::vector<int> path;
     int current = destination;
-
     while (current != source && current != -1) {
         path.push_back(current);
         current = prev[current];
     }
-
     if (current == source) {
         path.push_back(source);
     } else {
         path.clear(); // No path exists
     }
-
     std::reverse(path.begin(), path.end());
+    std::cout << "Shortest path from Node " << source << " to Node " << destination << ": ";
+    for (int node : path) {
+        std::cout << node << " ";
+    }
+    std::cout << std::endl;
     return path;
 }
 
+//dynamic pathfinder
 std::vector<int> Network::weighted_shortest_path(int source) {
     const int num_nodes = nodes.size();
     std::vector<int> dist(num_nodes, std::numeric_limits<int>::max());
     std::vector<int> prev(num_nodes, -1);
     std::vector<bool> visited(num_nodes, false);
-
     dist[source] = 0;
-
     for (int count = 0; count < num_nodes - 1; count++) {
         int u = -1;
-
         for (int i = 0; i < num_nodes; i++) {
             if (!visited[i] && (u == -1 || dist[i] < dist[u])) {
                 u = i;
             }
         }
-
         visited[u] = true;
-
         const Computer& curr_computer = nodes[u];
-
         for (int v : curr_computer.edges) {
-            int alt = dist[u] + GetEdgeWeight(&nodes[v]) + nodes[v].GetQueueSize();
-
+            int alt = dist[u] + nodes[v].GetQueueSize(); // Edge weight is equal to the queue size of the destination node
             if (alt < dist[v]) {
                 dist[v] = alt;
                 prev[v] = u;
+                std::cout << "Weighted: Node " << u << " connects to Node " << v << " with queue size " << nodes[v].GetQueueSize() << std::endl;
             }
         }
     }
-
     return prev;
 }
 
 
 
-
-//use the shortest path for routing
-void Network::routeMessage(Message* message) {
-
-    int source = message->getSource()->getId(); // Extract integer ID from Computer object
-    int destination = message->getDestination()->getId(); // Extract integer ID from Computer object
-
-    std::cout << "Routing message from source node " << source << " to destination node " << destination << std::endl;
-
-    std::vector<int> prev;
-    if (routing_algorithm == RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA) {
-        prev = equal_weight_dijkstra(source);
-    } else {
-        prev = weighted_shortest_path(source);
-    }
-
-    std::vector<int> path = getShortestPath(source, destination, prev);
-
-    // Perform the actual routing by iterating through the path
-    if (!path.empty()) {
-        for (size_t i = 0; i < path.size() - 1; ++i) {
-            int currentNode = path[i];
-            int nextNode = path[i + 1];
-
-            std::cout << "Routing message from node " << currentNode << " to node " << nextNode << std::endl;
-        }
-    } else {
-        std::cout << "No path exists between node " << source << " and node " << destination << std::endl;
-    }
-}
-
-
-
-void Network::CreateMessage(int sourceNodeIndex, int destinationNodeIndex) {
-    // Check if the source and destination node indices are valid
-    if (is_valid_node_index(sourceNodeIndex, nodes.size()) && is_valid_node_index(destinationNodeIndex, nodes.size())) {
-        // Create a new message and set its source and destination
-        Time currentTime; // Provide the current simulation time
-        Message* message = new Message(&nodes[sourceNodeIndex], &nodes[destinationNodeIndex], currentTime);
-
-        // Route the message
-        routeMessage(message);
-    }
-}
 
 
 

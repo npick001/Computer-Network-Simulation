@@ -19,30 +19,10 @@ public:
     void ReportStatistics();
     std::vector<int> edges;
     int getId() const;
-
-private:
-    // EventAction subclasses
-    class GenerateMessageEA : public EventAction {
-    public:
-        GenerateMessageEA(Computer* c);
-        void Execute();
-    private:
-        Computer* _c;
-    };
-
-    class ArriveEA : public EventAction {
-    public:
-        ArriveEA(Computer* c, Message* m);
-        void Execute();
-    private:
-        Computer* _c;
-        Message* _m;
-    };
-
     // Event methods
     void GenerateMessageEM();
     void ArriveEM(Message* message);
-
+    void ProcessMessage(); // Add the ProcessMessage method declaration
     // Member variables
     Triangular& serviceTimeDist;
     Exponential& msgGenRateDist;
