@@ -3,8 +3,6 @@
 #include "SimulationExecutive.h"
 #include "FIFO.h" // Include the FIFO header
 
-Network* Computer::_computerNetwork = 0;
-
 DistributionValues::DistributionValues()
 {
     _min = -1;
@@ -91,11 +89,12 @@ private:
 
 Computer::Computer(Triangular* serviceTimeDist, Exponential* msgGenRateDist, const std::vector<int>& edges, int id)
 {
+    _computerNetwork = 0;
     _serviceTimeDist = serviceTimeDist;
     _msgGenRateDist = msgGenRateDist;
     _edges = edges;
     _id = id;
-    _connectedEdges = _edges.size();
+    _connectedEdges = 0;
     _serviceQueue = new FIFO<Message>("Service Queue"); // Create an instance of the FIFO class
     _available = true;
 }
@@ -116,28 +115,18 @@ void Computer::Arrive(Message* message)
 void Computer::GenerateMessageEM()
 {
     // Create a new message
-    int finalDestination = rand() % _computerNetwork->GetNetworkSize() - 1;
-
-    while (finalDestination == _id) {
-        finalDestination = rand() % _computerNetwork->GetNetworkSize() - 1;
-    }
-
+    std::cout << _computerNetwork->nodes.size() << std::endl;
+    int finalDestination = rand() % 4;
     Message* message = new Message(&_computerNetwork->nodes[_id], &_computerNetwork->nodes[finalDestination], SimulationExecutive::GetSimulationTime());
     std::cout << "Computer " << _id << ": sending to \tComputer " << message->getDestination()->getId() << "." << std::endl;
 
-    // use path to determine where it is going.
-    std::vector<int> here = { _id };
-    std::vector<int> path = _computerNetwork->getShortestPath(message->getSource()->getId(), message->getDestination()->getId(), here);
-    // here we would add the different algorithms.
-
-    std::cout << "Next computer ID: " << path[0] << std::endl;
-    _computerNetwork->nodes[path[0]].Arrive(message);
+    // Add the new message to the queue
+    _serviceQueue->AddEntity(message);
 
     // Schedule the routing event
     Time genTime = _msgGenRateDist->GetRV();
     SimulationExecutive::ScheduleEventIn(genTime, new GenerateMessageEA(this));
 };
-
 void Computer::StartServiceEM() {
 
     _available = false;
@@ -184,7 +173,7 @@ void Computer::ProcessMessage() {
             }
             std::vector<int> path = _computerNetwork->getShortestPath(_id, finalDestination, prev);
             // If the path exists, update the message's destination to the next node in the path
-            if (path.size() >= 1) {
+            if (path.size() > 1) {
                 int nextDestinationId = path[1];
                 message->setDestination(&_computerNetwork->nodes[nextDestinationId]);
                 // Route the message to the next computer in the network
