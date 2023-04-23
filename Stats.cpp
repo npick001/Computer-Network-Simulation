@@ -3,16 +3,8 @@
 StatContainer::StatContainer()
 {
     _start = SimulationExecutive::GetSimulationTime();
-}
-
-void StatContainer::EnterN(Time en)
-{
-    _enterN = en;
-}
-
-void StatContainer::LeaveN(Time ln)
-{
-    _exitN = ln;
+    _timesStopped = 0;
+    _QueueT = 0;
 }
 
 void StatContainer::EnterQ(Time Eq)
@@ -24,4 +16,5 @@ void StatContainer::LeaveQ(Time Lq)
 {
     _exitQ = Lq;
     _QueueT += (_exitQ - _enterQ);
+    _timesStopped++;
 }

@@ -13,5 +13,7 @@ int main() {
 	myNetwork.equal_weight_dijkstra(0);
 	// Find the shortest path based on the expected cost at each node
 //	myNetwork.dijkstra(0, true);
+
+
     return 0;
 }

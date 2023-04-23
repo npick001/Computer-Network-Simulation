@@ -2,12 +2,12 @@
 
 Message::Message()
 {
-	_timesStopped = 0;
-	_waitTime = 0;
+	_sc = *(new StatContainer);
 }
 
 Message::~Message()
 {
+	delete &_sc;
 }
 
 void Message::ReportStatistics()
@@ -16,12 +16,10 @@ void Message::ReportStatistics()
 
 void Message::EnterQ(Time Eq)
 {
-	_enterQ = Eq;
+	_sc.EnterQ(Eq);
 }
 
 Time Message::LeaveQ(Time Lq)
 {
-	_exitQ = Lq;
-	_waitTime += (_exitQ - _enterQ);
-	_timesStopped++;
+	_sc.LeaveQ(Lq);
 }
