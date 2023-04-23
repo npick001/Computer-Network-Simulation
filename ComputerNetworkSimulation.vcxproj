@@ -142,6 +142,7 @@
     <ClInclude Include="Message.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="SimulationExecutive.h" />
+    <ClInclude Include="Stats.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
