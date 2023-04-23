@@ -25,9 +25,7 @@ public:
     void parseGraphFromFile(const std::string& filename);
     std::vector<int>equal_weight_dijkstra(int source);
     std::vector<int>getShortestPath(int source, int destination, const std::vector<int>& prev);
-    void routeMessage(Message* message);
     std::vector<int>weighted_shortest_path(int source);
-    //void CreateMessage(int sourceNodeIndex, int destinationNodeIndex);
 
 private:
     static Computer* _computerNetwork;

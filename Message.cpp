@@ -41,3 +41,7 @@ Computer* Message::getDestination() const
 {
     return _destination;
 }
+
+void Message::setDestination(Computer* computer) {
+    _destination = computer;
+}

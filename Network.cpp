@@ -230,47 +230,6 @@ std::vector<int> Network::weighted_shortest_path(int source) {
     return prev;
 }
 
-//use the shortest path for routing
-void Network::routeMessage(Message* message) {
-
-    int source = message->getSource()->getId(); // Extract integer ID from Computer object
-    int destination = message->getDestination()->getId(); // Extract integer ID from Computer object
-
-    std::cout << "Routing message from source node " << source << " to destination node " << destination << std::endl;
-
-    std::vector<int> prev;
-    if (routing_algorithm == RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA) {
-        prev = equal_weight_dijkstra(source);
-    } else {
-        prev = weighted_shortest_path(source);
-    }
-
-    std::vector<int> path = getShortestPath(source, destination, prev);
-
-    // Perform the actual routing by iterating through the path
-    if (!path.empty()) {
-        for (size_t i = 0; i < path.size() - 1; ++i) {
-            int currentNode = path[i];
-            int nextNode = path[i + 1];
-
-            std::cout << "Routing message from node " << currentNode << " to node " << nextNode << std::endl;
-        }
-    } else {
-        std::cout << "No path exists between node " << source << " and node " << destination << std::endl;
-    }
-}
-
-void Network::CreateMessage(int sourceNodeIndex, int destinationNodeIndex) {
-    // Check if the source and destination node indices are valid
-    if (is_valid_node_index(sourceNodeIndex, nodes.size()) && is_valid_node_index(destinationNodeIndex, nodes.size())) {
-        // Create a new message and set its source and destination
-        Message* message = new Message(&nodes[sourceNodeIndex], &nodes[destinationNodeIndex], SimulationExecutive::GetSimulationTime());
-
-        // Route the message
-        routeMessage(message);
-    }
-}
-
 void Network::print_graph(const Network& _computerNetwork) {
     for (size_t i = 0; i < _computerNetwork.nodes.size(); ++i) {
         const auto& computer = _computerNetwork.nodes[i];

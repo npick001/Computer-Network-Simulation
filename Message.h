@@ -15,6 +15,7 @@ public:
     void updateWaitTime(Time waitTime);
     void reportStatistics() const;
 
+    void setDestination(Computer* computer);
     Computer* getSource() const;
     Computer* getDestination() const;
 private:
