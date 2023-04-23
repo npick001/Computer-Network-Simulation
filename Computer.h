@@ -1,36 +1,57 @@
-#pragma once
+#ifndef COMPUTER_H
+#define COMPUTER_H
+
 #include "Distribution.h"
-#include "FIFO.h"
+#include "Message.h"
+#include "Network.h"
 #include "SimulationExecutive.h"
+#include "FIFO.h"
+#include <vector>
 
-class Message; // Forward declaration
+class Network;
 
-class Computer
-{
+class Computer {
 public:
-    Triangular serviceTimeDist;
-    Exponential msgGenRateDist;
-    std::vector<int> edges;
-
     Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges, int id);
+    void SetNetwork(Network* network);
+    void AddMessageToSource(Message* message);
     int GetQueueSize();
     void ReportStatistics();
-    int find_next_node(const std::vector<int>& dist, const std::vector<Computer>& nodes);
-    double GetExpectedCost();
-    int getId() const { return _id; }
+    std::vector<int> edges;
+    int getId() const;
 
 private:
-    Computer* _connectedEdges;
+    // EventAction subclasses
+    class GenerateMessageEA : public EventAction {
+    public:
+        GenerateMessageEA(Computer* c);
+        void Execute();
+    private:
+        Computer* _c;
+    };
+
+    class ArriveEA : public EventAction {
+    public:
+        ArriveEA(Computer* c, Message* m);
+        void Execute();
+    private:
+        Computer* _c;
+        Message* _m;
+    };
+
+    // Event methods
+    void GenerateMessageEM();
+    void ArriveEM(Message* message);
+
+    // Member variables
+    Triangular& serviceTimeDist;
+    Exponential& msgGenRateDist;
     int _id;
+    int _connectedEdges;
     FIFO<Message>* _serviceQueue;
     bool _available;
     Distribution* _genRate;
-    class GenerateMessageEA;
-    void GenerateMessageEM();
-    class ArriveEA;
-    void ArriveEM(Message* message);
-    class StartServiceEA;
-    void StartServiceEM();
-    class DoneServiceEA;
-    void DoneServiceEM(Message* message);
+    Network* _computerNetwork;
 };
+
+#endif // COMPUTER_H

@@ -12,7 +12,7 @@
 
 Computer* Network::_computerNetwork = 0;
 
-
+//
 void Network::ReadFile(std::string filename) {
     try {
         parseGraphFromFile(filename);
@@ -34,10 +34,20 @@ bool Network::is_valid_node_index(int index, int num_nodes) {
     return index >= 0 && index < num_nodes;
 }
 
-std::string Network::read_label(std::istream& in) {
+int Network::read_label(std::istream& in) {
     std::string label;
     std::getline(in, label, ':');
-    return label;
+
+    int node_id = -1;
+    std::istringstream label_stream(label);
+    std::string node_prefix;
+    label_stream >> node_prefix >> node_id;
+
+    if (node_prefix != "Node" || node_id < 0) {
+        throw std::runtime_error("Invalid node label format");
+    }
+
+    return node_id;
 }
 
 void Network::read_edges(std::istream& in, int num_edges, std::vector<int>& edges, int num_nodes, int current_node) {
@@ -92,7 +102,7 @@ void Network::parseGraphFromFile(const std::string& filename) {
     file.ignore(); // Ignore the newline character
 
     for (int i = 0; i < num_nodes; ++i) {
-        read_label(file); // Read and ignore the "Node X:" label
+        int node_id = read_label(file);
 
         double min, mode, max;
         read_triangular(file, min, mode, max); // Read triangular distribution values for service time
@@ -112,8 +122,9 @@ void Network::parseGraphFromFile(const std::string& filename) {
 
         Triangular serviceTimeDist(min, mode, max);
         Exponential msgGenRateDist(msg_gen_rate);
-        Computer computer(serviceTimeDist, msgGenRateDist, edges, 1); //change this id generate later
+        Computer computer(serviceTimeDist, msgGenRateDist, edges, node_id);
         addNode(computer);
+        computer.SetNetwork(this);
     }
 
     file >> std::ws; // Ignore any trailing whitespace
@@ -189,12 +200,58 @@ std::vector<int> Network::getShortestPath(int source, int destination, const std
     return path;
 }
 
+std::vector<int> Network::weighted_shortest_path(int source) {
+    const int num_nodes = nodes.size();
+    std::vector<int> dist(num_nodes, std::numeric_limits<int>::max());
+    std::vector<int> prev(num_nodes, -1);
+    std::vector<bool> visited(num_nodes, false);
+
+    dist[source] = 0;
+
+    for (int count = 0; count < num_nodes - 1; count++) {
+        int u = -1;
+
+        for (int i = 0; i < num_nodes; i++) {
+            if (!visited[i] && (u == -1 || dist[i] < dist[u])) {
+                u = i;
+            }
+        }
+
+        visited[u] = true;
+
+        const Computer& curr_computer = nodes[u];
+
+        for (int v : curr_computer.edges) {
+            int alt = dist[u] + GetEdgeWeight(&nodes[v]) + nodes[v].GetQueueSize();
+
+            if (alt < dist[v]) {
+                dist[v] = alt;
+                prev[v] = u;
+            }
+        }
+    }
+
+    return prev;
+}
+
+
+
+
 //use the shortest path for routing
 void Network::routeMessage(Message* message) {
+
     int source = message->getSource()->getId(); // Extract integer ID from Computer object
     int destination = message->getDestination()->getId(); // Extract integer ID from Computer object
 
-    std::vector<int> prev = equal_weight_dijkstra(source);
+    std::cout << "Routing message from source node " << source << " to destination node " << destination << std::endl;
+
+    std::vector<int> prev;
+    if (routing_algorithm == RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA) {
+        prev = equal_weight_dijkstra(source);
+    } else {
+        prev = weighted_shortest_path(source);
+    }
+
     std::vector<int> path = getShortestPath(source, destination, prev);
 
     // Perform the actual routing by iterating through the path
@@ -209,6 +266,21 @@ void Network::routeMessage(Message* message) {
         std::cout << "No path exists between node " << source << " and node " << destination << std::endl;
     }
 }
+
+
+
+void Network::CreateMessage(int sourceNodeIndex, int destinationNodeIndex) {
+    // Check if the source and destination node indices are valid
+    if (is_valid_node_index(sourceNodeIndex, nodes.size()) && is_valid_node_index(destinationNodeIndex, nodes.size())) {
+        // Create a new message and set its source and destination
+        Time currentTime; // Provide the current simulation time
+        Message* message = new Message(&nodes[sourceNodeIndex], &nodes[destinationNodeIndex], currentTime);
+
+        // Route the message
+        routeMessage(message);
+    }
+}
+
 
 
 void Network::print_graph(const Network& _computerNetwork) {

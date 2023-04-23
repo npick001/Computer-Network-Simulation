@@ -1,8 +1,9 @@
 #include <iostream>
 #include "SimulationExecutive.h"
+#include "Message.h" // Include the Message.h file
 
 using namespace std;
-
+std::vector<Message*> SimulationExecutive::_messages;
 struct SimulationExecutive::Event
 {
 	Event(Time time, EventAction *ea)
@@ -238,3 +239,33 @@ void SimulationExecutive::SetBinSize(Time t)
 void SimulationExecutive::SetNumBins(int NumBins) {
 	_eventSet.SetNumBins(NumBins);
 }
+
+
+void SimulationExecutive::addMessage(Message* message)
+{
+    _messages.push_back(message);
+}
+
+void SimulationExecutive::removeMessage(Message* message)
+{
+    for (auto it = _messages.begin(); it != _messages.end(); ++it)
+    {
+        if (*it == message)
+        {
+            _messages.erase(it);
+            break;
+        }
+    }
+}
+
+void SimulationExecutive::printMessageStatistics()
+{
+    std::cout << "Total messages: " << _messages.size() << std::endl;
+    for (const auto& message : _messages)
+    {
+        message->reportStatistics();
+    }
+}
+
+
+
