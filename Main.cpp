@@ -13,7 +13,7 @@ void main() {
 
 	Network network(RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA);
 	network.ReadFile("foo.txt");
-	network.CreateMessage(0, 3);
+	//network.CreateMessage(0, 3);
 	//myNetwork.equal_weight_dijkstra(0);
 
 
