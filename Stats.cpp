@@ -5,12 +5,23 @@ StatContainer::StatContainer()
     _start = SimulationExecutive::GetSimulationTime();
 }
 
-void StatContainer::EnterN()
+void StatContainer::EnterN(Time en)
 {
-    _enterN = SimulationExecutive::GetSimulationTime();
+    _enterN = en;
 }
 
-void StatContainer::LeaveN()
+void StatContainer::LeaveN(Time ln)
 {
-    _exitN = SimulationExecutive::GetSimulationTime();
+    _exitN = ln;
+}
+
+void StatContainer::EnterQ(Time Eq)
+{
+    _enterQ = Eq;
+}
+
+void StatContainer::LeaveQ(Time Lq)
+{
+    _exitQ = Lq;
+    _QueueT += (_exitQ - _enterQ);
 }

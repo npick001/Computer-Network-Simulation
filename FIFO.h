@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include "SimulationExecutive.h"
-
+#include "Stats.h"
 /**************************
 
 FIFO Queue, with added functionality.
@@ -28,6 +28,9 @@ public:
 		else {
 			_tail = _tail->next = node;
 		}
+		((StatContainer*)t)->EnterQ(SimulationExecutive::GetSimulationTime()); // Marks the time a message joined the queue;
+		((StatContainer*)t)->EnterN(SimulationExecutive::GetSimulationTime()); // The message should join the queue as soon as it enters the node if at all, so set enter node time to enter queue time.
+
 	//	std::cout << GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
 	//	std::cout << GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
@@ -44,6 +47,7 @@ public:
 //			std::cout << GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
 		//	std::cout << GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+			((StatContainer*)t)->LeaveQ(SimulationExecutive::GetSimulationTime());
 			return t;
 		}
 	}
