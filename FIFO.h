@@ -1,10 +1,7 @@
 #pragma once
 #include <iostream>
 #include "SimulationExecutive.h"
-<<<<<<< HEAD
-=======
 
->>>>>>> pepper2.0
 /**************************
 
 FIFO Queue, with added functionality.
@@ -31,15 +28,10 @@ public:
 		else {
 			_tail = _tail->next = node;
 		}
-<<<<<<< HEAD
+
 		std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
 		std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
-=======
-	//	std::cout << GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
-		_size++;
-	//	std::cout << GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
->>>>>>> pepper2.0
 	}
 
 	T* GetEntity()
@@ -50,15 +42,11 @@ public:
 			T* t = _head->t;
 			_head = _head->next;
 			//			delete n;
-<<<<<<< HEAD
+
 			std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
 			std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
-=======
-//			std::cout << GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
-			_size--;
-		//	std::cout << GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
->>>>>>> pepper2.0
+
 			return t;
 		}
 	}

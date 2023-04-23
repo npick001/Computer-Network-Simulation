@@ -1,20 +1,13 @@
 #include "Message.h"
 #include "Computer.h"
 
-<<<<<<< HEAD
-Message::Message(Computer* source, Computer* destination)
-=======
 Message::Message(Computer* source, Computer* destination, Time creationTime)
-    : _source(source), _destination(destination), _creationTime(creationTime), _waitTime(0), _timesStopped(0)
->>>>>>> pepper2.0
 {
 	_source = source;
 	_destination = destination;
-
-	_creationTime = SimulationExecutive::GetSimulationTime();
+	_creationTime = creationTime;
 	_destinationTime = -1;
 	_waitTime = 0;
-
 	_timesStopped = 0;
 }
 

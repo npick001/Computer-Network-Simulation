@@ -12,7 +12,6 @@
 
 Computer* Network::_computerNetwork = 0;
 
-//
 void Network::ReadFile(std::string filename) {
     try {
         parseGraphFromFile(filename);
@@ -70,7 +69,6 @@ void Network::read_edges(std::istream& in, int num_edges, std::vector<int>& edge
     }
 }
 
-
 void Network::read_triangular(std::istream& in, double& min, double& mode, double& max) {
     char ch;
     in >> min >> ch >> mode >> ch >> max;
@@ -85,7 +83,6 @@ void Network::read_exponential(std::istream& in, double& rate) {
         throw std::runtime_error("Invalid exponential distribution format");
     }
 }
-
 
 void Network::parseGraphFromFile(const std::string& filename) {
     std::ifstream file(filename);
@@ -134,7 +131,6 @@ void Network::parseGraphFromFile(const std::string& filename) {
 
     file.close();
 }
-
 
 void Network::print_shortest_path_distances(const std::vector<int>& dist) {
     std::cout << "Shortest path distances from the source node:\n";
@@ -234,9 +230,6 @@ std::vector<int> Network::weighted_shortest_path(int source) {
     return prev;
 }
 
-
-
-
 //use the shortest path for routing
 void Network::routeMessage(Message* message) {
 
@@ -267,21 +260,16 @@ void Network::routeMessage(Message* message) {
     }
 }
 
-
-
 void Network::CreateMessage(int sourceNodeIndex, int destinationNodeIndex) {
     // Check if the source and destination node indices are valid
     if (is_valid_node_index(sourceNodeIndex, nodes.size()) && is_valid_node_index(destinationNodeIndex, nodes.size())) {
         // Create a new message and set its source and destination
-        Time currentTime; // Provide the current simulation time
-        Message* message = new Message(&nodes[sourceNodeIndex], &nodes[destinationNodeIndex], currentTime);
+        Message* message = new Message(&nodes[sourceNodeIndex], &nodes[destinationNodeIndex], SimulationExecutive::GetSimulationTime());
 
         // Route the message
         routeMessage(message);
     }
 }
-
-
 
 void Network::print_graph(const Network& _computerNetwork) {
     for (size_t i = 0; i < _computerNetwork.nodes.size(); ++i) {

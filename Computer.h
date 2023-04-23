@@ -1,22 +1,16 @@
-#ifndef COMPUTER_H
-#define COMPUTER_H
+#pragma once
 
+#include "FIFO.h"
+#include <vector>
 #include "Distribution.h"
 #include "Message.h"
 #include "Network.h"
 #include "SimulationExecutive.h"
-<<<<<<< HEAD
-class Message;
-class Computer 
-{
-=======
-#include "FIFO.h"
-#include <vector>
 
+class Message;
 class Network;
 
 class Computer {
->>>>>>> pepper2.0
 public:
     Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges, int id);
     void SetNetwork(Network* _network);
@@ -28,26 +22,16 @@ public:
 
 private:
     // EventAction subclasses
-    class GenerateMessageEA : public EventAction {
-    public:
-        GenerateMessageEA(Computer* c);
-        void Execute();
-    private:
-        Computer* _c;
-    };
-
-    class ArriveEA : public EventAction {
-    public:
-        ArriveEA(Computer* c, Message* m);
-        void Execute();
-    private:
-        Computer* _c;
-        Message* _m;
-    };
+    class GenerateMessageEA;
+    class ArriveEA;
+    class StartServiceEA;
+    class DoneServiceEA;
 
     // Event methods
     void GenerateMessageEM();
     void ArriveEM(Message* message);
+    void StartServiceEM();
+    void DoneServiceEM(Message* message);
 
     // Member variables
     Triangular& serviceTimeDist;
@@ -59,5 +43,3 @@ private:
     Distribution* _genRate;
     Network* _computerNetwork;
 };
-
-#endif // COMPUTER_H

@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <istream>
+class Computer;
+class Message;
 
 enum class RoutingAlgorithm {
     EQUAL_WEIGHT_DIJKSTRA,
