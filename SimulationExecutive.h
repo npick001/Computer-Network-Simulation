@@ -1,8 +1,6 @@
 #pragma once
-#include <vector>
-typedef double Time;
 
-class Message;
+typedef double Time;
 
 class EventAction
 {
@@ -69,14 +67,10 @@ public:
 	This function should only be used in testing to test out different values of number of bins.
 	*/
 	static void SetNumBins(int numBins);
-	static void addMessage(Message* message);
-    static void removeMessage(Message* message);
-    static void printMessageStatistics();
 
 private:
 	struct Event;
 	class EventSet;
 	static EventSet _eventSet;
 	static Time _simTime;
-	static std::vector<Message*> _messages;
 };

@@ -13,7 +13,7 @@ class Network;
 class Computer {
 public:
     Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges, int id);
-    void SetNetwork(Network* network);
+    void SetNetwork(Network* _network);
     void AddMessageToSource(Message* message);
     int GetQueueSize();
     void ReportStatistics();

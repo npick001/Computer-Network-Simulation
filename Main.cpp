@@ -3,25 +3,17 @@
 #include "EventSet.h"
 #include "Network.h"
 #include "SimulationExecutive.h"
-#include <vector>
-#include <iostream>
 
 using namespace std;
 
-
 int main() {
 
-
-    Network network(RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA);
-    //Network network(RoutingAlgorithm::WEIGHTED_SHORTEST_PATH);
-    network.ReadFile("foo.txt");
-
-    // Create a message from node 0 to node 2
-    network.CreateMessage(0, 3);
-
-
-    // Duration of the simulation in seconds
-
-
+	Network network(RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA);
+	network.ReadFile("foo.txt");
+	network.CreateMessage(0, 3);
+	//myNetwork.equal_weight_dijkstra(0);
     return 0;
+	// Find the shortest path based on the expected cost at each node
+	//myNetwork.dijkstra(0, true);
+
 }
