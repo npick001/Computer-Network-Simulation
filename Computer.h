@@ -22,13 +22,16 @@ struct DistributionValues {
 
 class Computer {
 public:
-    Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges, int id);
-    void SetNetwork(Network* _network);
+    Computer();
+    Computer(Triangular* serviceTimeDist, Exponential* msgGenRateDist, const std::vector<int>& edges, int id);
+    void Begin();
+    void Arrive(Message* message);
+    void SetNetwork(Network* network);
     int GetQueueSize();
     void ReportStatistics();
     int getId() const;
 
-    std::vector<int> edges;
+    std::vector<int> _edges;
     void SetMyValues(double min, double mode, double max, double genRate, int numEdges);
     DistributionValues myValues;
 private:
@@ -44,8 +47,8 @@ private:
     void ProcessMessage(); // Add the ProcessMessage method declaration
 
     // Member variables
-    Triangular& _serviceTimeDist;
-    Exponential& _msgGenRateDist;
+    Triangular* _serviceTimeDist;
+    Exponential* _msgGenRateDist;
     int _id;
     int _connectedEdges;
     FIFO<Message>* _serviceQueue;

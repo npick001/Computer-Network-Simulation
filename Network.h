@@ -28,7 +28,7 @@ public:
     std::vector<int>weighted_shortest_path(int source);
 
 private:
-    static Computer* _computerNetwork;
+    //static Computer* _computerNetwork;
     double* _distributionValues;
     bool is_valid_node_index(int index, int num_nodes);
     int read_label(std::istream& in);

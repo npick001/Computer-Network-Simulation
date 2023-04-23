@@ -10,7 +10,7 @@
 #include "Message.h"
 #include <algorithm>
 
-Computer* Network::_computerNetwork = 0;
+//Computer* Network::_computerNetwork = 0;
 
 void Network::ReadFile(std::string filename) {
     try {
@@ -96,6 +96,7 @@ void Network::parseGraphFromFile(const std::string& filename) {
         throw std::runtime_error("Invalid number of nodes");
     }
 
+    //_computerNetwork = new Computer[num_nodes];
     file.ignore(); // Ignore the newline character
 
     for (int i = 0; i < num_nodes; ++i) {
@@ -117,13 +118,17 @@ void Network::parseGraphFromFile(const std::string& filename) {
         std::vector<int> edges(num_edges);
         read_edges(file, num_edges, edges, num_nodes, i);
 
-        Triangular serviceTimeDist(min, mode, max);
+        Triangular* serviceTimeDist = new Triangular(min, mode, max);
         //std::cout << min << ", " << mode << ", " << max << std::endl;
-        Exponential msgGenRateDist(msg_gen_rate);
+        Exponential* msgGenRateDist = new Exponential(msg_gen_rate);
         Computer computer(serviceTimeDist, msgGenRateDist, edges, node_id);
         computer.SetMyValues(min, mode, max, msg_gen_rate, num_edges);
         addNode(computer);
         computer.SetNetwork(this);
+    }
+
+    for (int i = 0; i < num_nodes; i++) {
+        nodes[i].Begin();
     }
 
     file >> std::ws; // Ignore any trailing whitespace
@@ -165,7 +170,7 @@ std::vector<int> Network::equal_weight_dijkstra(int source) {
 
         const Computer& curr_computer = nodes[u];
 
-        for (int v : curr_computer.edges) {
+        for (int v : curr_computer._edges) {
             int alt = dist[u] + 1;
 
             if (alt < dist[v]) {
@@ -219,7 +224,7 @@ std::vector<int> Network::weighted_shortest_path(int source) {
 
         const Computer& curr_computer = nodes[u];
 
-        for (int v : curr_computer.edges) {
+        for (int v : curr_computer._edges) {
             int alt = dist[u] + GetEdgeWeight(&nodes[v]) + nodes[v].GetQueueSize();
 
             if (alt < dist[v]) {
@@ -242,9 +247,9 @@ void Network::print_graph(const Network& _computerNetwork) {
         std::cout << "  Message generation rate (exponential): " << computer.myValues._messageGenRate << "\n";
 
         std::cout << "  Edges: ";
-        for (size_t j = 0; j < computer.edges.size(); ++j) {
-            std::cout << computer.edges[j];
-            if (j < computer.edges.size() - 1) {
+        for (size_t j = 0; j < computer._edges.size(); ++j) {
+            std::cout << computer._edges[j];
+            if (j < computer._edges.size() - 1) {
                 std::cout << ", ";
             }
         }

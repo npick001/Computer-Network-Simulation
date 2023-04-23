@@ -21,18 +21,6 @@ DistributionValues::DistributionValues(double min, double mode, double max, doub
     _numEdges = numEdges;
 }
 
-Computer::Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges, int id)
-    : _serviceTimeDist(serviceTimeDist), _msgGenRateDist(msgGenRateDist), edges(edges), _id(id)
-{
-    _connectedEdges = 0;
-    _serviceQueue = new FIFO<Message>("Service Queue"); // Create an instance of the FIFO class
-    _available = true;
-}
-
-void Computer::SetNetwork(Network* network) {
-    _computerNetwork = network;
-}
-
 int Computer::GetQueueSize() {
     return _serviceQueue->GetSize();
 }
@@ -40,6 +28,7 @@ int Computer::GetQueueSize() {
 void Computer::ReportStatistics()
 {
 }
+
 class Computer::GenerateMessageEA : public EventAction
 {
 public:
@@ -97,27 +86,54 @@ private:
     Computer* _c;
     Message* _m;
 };
+
+Computer::Computer(Triangular* serviceTimeDist, Exponential* msgGenRateDist, const std::vector<int>& edges, int id)
+{
+    _computerNetwork = 0;
+    _serviceTimeDist = serviceTimeDist;
+    _msgGenRateDist = msgGenRateDist;
+    _edges = edges;
+    _id = id;
+    _connectedEdges = 0;
+    _serviceQueue = new FIFO<Message>("Service Queue"); // Create an instance of the FIFO class
+    _available = true;
+}
+
+void Computer::SetNetwork(Network* network) {
+    _computerNetwork = network;
+}
+
+void Computer::Begin() {
+    SimulationExecutive::ScheduleEventIn(0.0, new GenerateMessageEA(this));
+}
+
+void Computer::Arrive(Message* message)
+{
+    SimulationExecutive::ScheduleEventIn(0.0, new ArriveEA(this, message));
+}
+
 void Computer::GenerateMessageEM()
 {
-    Time genTime = _msgGenRateDist.GetRV();
-
     // Create a new message
-    int finalDestination = rand() % _computerNetwork->nodes.size();
-    Message* message = new Message(&_computerNetwork->nodes[_id], &_computerNetwork->nodes[finalDestination], genTime);
+    std::cout << _computerNetwork->nodes.size() << std::endl;
+    int finalDestination = rand() % 4;
+    Message* message = new Message(&_computerNetwork->nodes[_id], &_computerNetwork->nodes[finalDestination], SimulationExecutive::GetSimulationTime());
+    std::cout << "Computer " << _id << ": sending to \tComputer " << message->getDestination()->getId() << "." << std::endl;
 
     // Add the new message to the queue
     _serviceQueue->AddEntity(message);
 
     // Schedule the routing event
+    Time genTime = _msgGenRateDist->GetRV();
     SimulationExecutive::ScheduleEventIn(genTime, new GenerateMessageEA(this));
 };
 void Computer::StartServiceEM() {
 
     _available = false;
-
+    std::cout << "Computer " << _id << "\tStart Service." << std::endl;
     ProcessMessage();
 
-    Time serviceTime = _serviceTimeDist.GetRV();
+    Time serviceTime = _serviceTimeDist->GetRV();
     SimulationExecutive::ScheduleEventIn(serviceTime, new DoneServiceEA(this, _serviceQueue->GetEntity()));
 }
 void Computer::ArriveEM(Message* message) {
@@ -130,6 +146,7 @@ void Computer::ArriveEM(Message* message) {
 void Computer::DoneServiceEM(Message* message) {
 
     _available = true;
+    std::cout << "Computer " << _id << "\tDone Service." << std::endl;
 
     if (_serviceQueue->GetSize() > 0) {
         SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
