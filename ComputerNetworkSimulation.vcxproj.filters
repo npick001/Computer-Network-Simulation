@@ -15,11 +15,60 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Computer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CClarke.cpp">
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Distribution.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\EventSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Message.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Network.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\SimulationExecutive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Computer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Distribution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\EventSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\FIFO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\SimulationExecutive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Stats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\foo.txt">
+      <Filter>Header Files</Filter>
+    </Text>
+    <Text Include="foo.txt">
+      <Filter>Header Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -18,6 +18,29 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Computer.cpp" />
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Distribution.cpp" />
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\EventSet.cpp" />
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Main.cpp" />
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Message.cpp" />
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Network.cpp" />
+    <ClCompile Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\SimulationExecutive.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Computer.h" />
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Distribution.h" />
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\EventSet.h" />
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\FIFO.h" />
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Message.h" />
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Network.h" />
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\SimulationExecutive.h" />
+    <ClInclude Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\Stats.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="foo.txt" />
+    <Text Include="H:\Downloads\MSIM331-Final-Project-master(1)\MSIM331-Final-Project-master\foo.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -42,7 +65,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -126,10 +149,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="CClarke.cpp" />
-    <ClCompile Include="Main.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
