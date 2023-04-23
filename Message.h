@@ -10,7 +10,7 @@ public:
 	~Message();
 	void ReportStatistics();
 	void EnterQ(Time Eq);
-	void LeaveQ(Time Lq);
+	Time LeaveQ(Time Lq);
 private:
 //	Computer* _source;
 //	Computer* _destination;
@@ -18,6 +18,7 @@ private:
 	Time _creationTime;
 	Time _destinationTime;
 	Time _waitTime;
+	Time _enterQ, _exitQ;
 	int _timesStopped; // number of wait times
 };
 

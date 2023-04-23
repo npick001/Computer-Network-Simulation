@@ -30,6 +30,6 @@ private:
     void StartServiceEM();
     class DoneServiceEA;
     void DoneServiceEM(Message* message);
-    double cdfService;
-    double numServed;
+    double _cdfService;
+    double _numServed;
 };

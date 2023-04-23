@@ -7,6 +7,8 @@ Computer::Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, con
     _serviceQueue = new FIFO<Message>("Service Queue");
     _available = true;
     _genRate = &msgGenRateDist;
+    _cdfService = 0;
+    _numServed = 0;
 }
 
 int Computer::GetQueueSize() {
