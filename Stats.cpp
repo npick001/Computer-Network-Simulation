@@ -12,9 +12,11 @@ void StatContainer::EnterQ(Time Eq)
     _enterQ = Eq;
 }
 
-void StatContainer::LeaveQ(Time Lq)
+Time StatContainer::LeaveQ(Time Lq)
 {
     _exitQ = Lq;
     _QueueT += (_exitQ - _enterQ);
     _timesStopped++;
+
+    return(_exitQ - _enterQ);
 }

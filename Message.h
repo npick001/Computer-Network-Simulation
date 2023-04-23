@@ -14,7 +14,8 @@ public:
 private:
 //	Computer* _source;
 //	Computer* _destination;
-
+	int _id;
+	static int nextID;
 	StatContainer _sc;
 };
 

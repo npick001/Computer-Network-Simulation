@@ -9,11 +9,12 @@ Computer::Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, con
     _genRate = &msgGenRateDist;
     _cdfService = 0;
     _numServed = 0;
+    ComputerSet.push_back(this);
 }
-
-int Computer::GetQueueSize() {
-    return _serviceQueue->GetSize();
-}
+   int Computer::GetQueueSize()
+    {
+        return _serviceQueue->GetSize();
+    }
 
 void Computer::ReportStatistics()
 {
@@ -84,7 +85,7 @@ void Computer::StartServiceEM() {
 
     _available = false;
 
-    //SimulationExecutive::ScheduleEventIn(_genRate->GetRV(), new DoneServiceEA(this, _serviceQueue->GetEntity()));
+    SimulationExecutive::ScheduleEventIn(_genRate->GetRV(), new DoneServiceEA(this, _serviceQueue->GetEntity()));
 }
 class Computer::DoneServiceEA : public EventAction
 {

@@ -7,7 +7,7 @@ class StatContainer
 public:
     StatContainer();
     void EnterQ(Time Eq);
-    void LeaveQ(Time Lq);
+    Time LeaveQ(Time Lq);
 
 private:
     Time _start, _end, _enterQ, _exitQ;     // Start/End Times
@@ -16,10 +16,14 @@ private:
 };
 
 
-class StatSorter
+class MsgStatSorter
 {
 public:
-    StatSorter(int ID, StatContainer _sc);
+    MsgStatSorter(int ID, StatContainer sc)
+    {
+        _id = ID;
+        _stats = sc;
+    }
     int GetID() { return _id; }
     StatContainer GetStatContainer() { return _stats}
 private:
@@ -27,5 +31,6 @@ private:
     StatContainer _stats;
 };
 
-std::list<StatSorter> StatSet;
-std::list<StatSorter>::iterator StatItr;
+std::list<MsgStatSorter> StatSet;
+std::list<MsgStatSorter>::iterator StatItr;
+std::list<Computer*> ComputerSet;

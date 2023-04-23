@@ -17,6 +17,9 @@ public:
 		_tail = 0;
 		_size = 0;
 		_name = name;
+		totalMsg = 0;
+		WaitTimes = 0;
+		maxSize = 0;
 	}
 
 	void AddEntity(T* t)
@@ -32,6 +35,8 @@ public:
 
 	//	std::cout << GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
+		totalMsg++;
+		if (_size > maxSize) maxSize = _size;
 	//	std::cout << GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 	}
 
@@ -46,7 +51,7 @@ public:
 //			std::cout << GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
 		//	std::cout << GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
-			((Message*)t)->LeaveQ(SimulationExecutive::GetSimulationTime());
+			WaitTimes += ((Message*)t)->LeaveQ(SimulationExecutive::GetSimulationTime());
 			return t;
 		}
 	}
@@ -69,6 +74,8 @@ private:
 		Node* next;
 	};
 
+	int totalMsg, maxSize;
+	Time WaitTimes;
 	Node* _head;
 	Node* _tail;
 	int _size;

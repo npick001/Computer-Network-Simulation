@@ -1,8 +1,11 @@
 #include "Message.h"
 
+int Message::nextID = 0;
+
 Message::Message()
 {
 	_sc = *(new StatContainer);
+	_id = nextID++;
 }
 
 Message::~Message()
@@ -21,5 +24,5 @@ void Message::EnterQ(Time Eq)
 
 Time Message::LeaveQ(Time Lq)
 {
-	_sc.LeaveQ(Lq);
+	return _sc.LeaveQ(Lq);
 }
