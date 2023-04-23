@@ -1,13 +1,13 @@
-#pragma once
+#ifndef COMPUTER_H
+#define COMPUTER_H
 
-#include "FIFO.h"
-#include <vector>
 #include "Distribution.h"
 #include "Message.h"
 #include "Network.h"
 #include "SimulationExecutive.h"
+#include "FIFO.h"
+#include <vector>
 
-class Message;
 class Network;
 
 class Computer {
@@ -17,29 +17,29 @@ public:
     void AddMessageToSource(Message* message);
     int GetQueueSize();
     void ReportStatistics();
-    std::vector<int> edges;
     int getId() const;
 
+    std::vector<int> edges;
 private:
-    // EventAction subclasses
+    // Event methods
     class GenerateMessageEA;
     class ArriveEA;
     class StartServiceEA;
     class DoneServiceEA;
-
-    // Event methods
     void GenerateMessageEM();
     void ArriveEM(Message* message);
     void StartServiceEM();
     void DoneServiceEM(Message* message);
+    void ProcessMessage(); // Add the ProcessMessage method declaration
 
     // Member variables
-    Triangular& serviceTimeDist;
-    Exponential& msgGenRateDist;
+    Triangular& _serviceTimeDist;
+    Exponential& _msgGenRateDist;
     int _id;
     int _connectedEdges;
     FIFO<Message>* _serviceQueue;
     bool _available;
-    Distribution* _genRate;
     Network* _computerNetwork;
 };
+
+#endif // COMPUTER_H
