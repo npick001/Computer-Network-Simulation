@@ -11,7 +11,6 @@ void main() {
 
 	Network network(RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA);
 	network.ReadFile("foo.txt");
-	//myNetwork.equal_weight_dijkstra(0);
 
 	SimulationExecutive::RunSimulation();
 }
