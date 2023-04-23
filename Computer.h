@@ -19,6 +19,7 @@ public:
     void ReportStatistics();
     int getId() const;
 
+    std::vector<int> edges;
 private:
     // Event methods
     class GenerateMessageEA;
@@ -32,14 +33,12 @@ private:
     void ProcessMessage(); // Add the ProcessMessage method declaration
 
     // Member variables
-    std::vector<int> edges;
-    Triangular& serviceTimeDist;
-    Exponential& msgGenRateDist;
+    Triangular& _serviceTimeDist;
+    Exponential& _msgGenRateDist;
     int _id;
     int _connectedEdges;
-    FIFO<Message*> _serviceQueue;
+    FIFO<Message>* _serviceQueue;
     bool _available;
-    Distribution* _genRate;
     Network* _computerNetwork;
 };
 

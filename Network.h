@@ -22,7 +22,7 @@ public:
     std::vector<int>getShortestPath(int source, int destination, const std::vector<int>& prev);
     //void routeMessage(Message* message);
     std::vector<int>weighted_shortest_path(int source);
-    void CreateMessage(int sourceNodeIndex, int destinationNodeIndex);
+    //void CreateMessage(int sourceNodeIndex, int destinationNodeIndex);
 
     std::vector<Computer> nodes;
 private:

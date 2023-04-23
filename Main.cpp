@@ -10,7 +10,7 @@ int main() {
 
 	Network network(RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA);
 	network.ReadFile("foo.txt");
-	network.CreateMessage(0, 3);
+	//network.CreateMessage(0, 3);
 	//myNetwork.equal_weight_dijkstra(0);
     return 0;
 	// Find the shortest path based on the expected cost at each node
