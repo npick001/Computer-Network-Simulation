@@ -1,10 +1,11 @@
 #pragma once
 #include "Computer.h"
+#include "SimulationExecutive.h"
 
 class Message
 {
 public:
-	Message();
+	Message(Computer* source, Computer* destination);
 	~Message();
 	void ReportStatistics();
 private:

@@ -4,8 +4,15 @@
 #include "SimulationExecutive.h"
 
 
-int main() {
-	return 0;
+void main() {
+	
+
+	SimulationExecutive::InitializeSimulation();
+
+
+
+
+	SimulationExecutive::RunSimulation();
 
 	//test github
 }
