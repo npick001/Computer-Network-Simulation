@@ -1,45 +1,43 @@
 #include "Computer.h"
 
-Computer::Computer(Distribution* generationRate)
+Computer::Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges, int id)
+    : serviceTimeDist(serviceTimeDist), msgGenRateDist(msgGenRateDist), edges(edges), _id(id)
 {
+<<<<<<< HEAD
 	_connectedEdges = 0;
 	_serviceQueue = new FIFO<Message>("Service Queue");
 	_available = true;
 	_genRate = generationRate;
+=======
+    _connectedEdges = 0;
+    _serviceQueue = new FIFO<Message>("Service Queue");
+    _available = true;
+    _genRate = &msgGenRateDist;
+>>>>>>> pepper2.0
 }
 
-int Computer::GetQueueSize()
-{
-	return _serviceQueue->GetSize();
+void Computer::SetNetwork(Network* network) {
+    _computerNetwork = network;
+}
+
+int Computer::GetQueueSize() {
+    return _serviceQueue->GetSize();
 }
 
 void Computer::ReportStatistics()
 {
 }
 
-class Computer::GenerateMessageEA : public EventAction
-{
-public:
-	GenerateMessageEA(Computer* c) {
-		_c = c;
-	}
-
-	void Execute() {
-		_c->GenerateMessageEM();
-	}
-private:
-	Computer* _c;
-};
 void Computer::GenerateMessageEM()
 {
-	Time genTime = _genRate->GetRV();
+    Time genTime = _genRate->GetRV();
 
-	// send to right place
+    // send to right place
 
-
-	SimulationExecutive::ScheduleEventIn(genTime, new GenerateMessageEA(this));
+//    SimulationExecutive::ScheduleEventIn(genTime, new GenerateMessageEA(this));
 };
 
+<<<<<<< HEAD
 class Computer::StartServiceEA : public EventAction
 {
 public:
@@ -77,15 +75,11 @@ public:
 		_c = c;
 		_m = m;
 	}
+=======
+>>>>>>> pepper2.0
 
-	void Execute() {
-		_c->ArriveEM(_m);
-	}
-private:
-	Computer* _c;
-	Message* _m;
-};
 
+<<<<<<< HEAD
 void Computer::StartServiceEM() {
 
 	_available = false;
@@ -109,3 +103,19 @@ void Computer::ArriveEM(Message* message) {
 		SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
 	}
 }
+=======
+void Computer::ArriveEM(Message* message) {
+
+    _serviceQueue->AddEntity(message);
+    if (_available) {
+//        SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
+    std::cout <<"stuff";
+    }
+}
+
+int Computer::getId() const {
+    return _id;
+}
+
+
+>>>>>>> pepper2.0
