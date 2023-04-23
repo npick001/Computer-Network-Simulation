@@ -1,37 +1,18 @@
 #pragma once
 #include <list>
 #include "SimulationExecutive.h"
-#include "Computer.h"
 
 class StatContainer
 {
 public:
-    StatContainer();
-    void EnterQ(Time Eq);
-    Time LeaveQ(Time Lq);
+	StatContainer();
+	void EnterN();
+	void LeaveN();
+	void EnterQ();
+	void LeaveQ();
 
 private:
-    Time _start, _end;     // Start/End Times
-    Time _enterQ, _exitQ, _QueueT;          // Queue arrival/departure times, and total queue time
-    int _timesStopped;                      // number of wait times
+	Time _start, _end, _enterQ, _exitQ;
+	std::list<Time> _TinNode;
+	std::list<Time> _QueueT;
 };
-
-/*
-class MsgStatSorter
-{
-public:
-    MsgStatSorter(int ID, StatContainer sc)
-    {
-        _id = ID;
-        _stats = sc;
-    }
-    int GetID() { return _id; }
-    StatContainer GetStatContainer() { return _stats }
-private:
-    int _id;
-    StatContainer _stats;
-};
-
-std::list<MsgStatSorter> StatSet;
-std::list<MsgStatSorter>::iterator StatItr;
-std::list<Computer*> ComputerSet;*/
