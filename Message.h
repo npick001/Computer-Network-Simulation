@@ -6,6 +6,7 @@
 #include <iostream>
 
 class Computer;
+class StatContainer;
 class Message
 {
 public:
