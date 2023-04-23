@@ -3,6 +3,24 @@
 #include "SimulationExecutive.h"
 #include "FIFO.h" // Include the FIFO header
 
+DistributionValues::DistributionValues()
+{
+    _min = -1;
+    _mode = -1;
+    _max = -1;
+    _messageGenRate = -1;
+    _numEdges = -1;
+}
+
+DistributionValues::DistributionValues(double min, double mode, double max, double genRate, int numEdges)
+{
+    _min = min;
+    _mode = mode;
+    _max = max;
+    _messageGenRate = genRate;
+    _numEdges = numEdges;
+}
+
 Computer::Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges, int id)
     : _serviceTimeDist(serviceTimeDist), _msgGenRateDist(msgGenRateDist), edges(edges), _id(id)
 {
@@ -152,4 +170,9 @@ void Computer::ProcessMessage() {
 
 int Computer::getId() const {
     return _id;
+}
+
+void Computer::SetMyValues(double min, double mode, double max, double genRate, int numEdges)
+{
+    myValues = DistributionValues(min, mode, max, genRate, numEdges);
 }

@@ -1,5 +1,4 @@
-#ifndef COMPUTER_H
-#define COMPUTER_H
+#pragma once
 
 #include "Distribution.h"
 #include "Message.h"
@@ -10,16 +9,28 @@
 
 class Network;
 
+struct DistributionValues {
+    DistributionValues();
+    DistributionValues(double min, double mode, double max, double genRate, int numEdges);
+
+    double _min;
+    double _mode;
+    double _max;
+    double _messageGenRate;
+    int _numEdges;
+};
+
 class Computer {
 public:
     Computer(Triangular& serviceTimeDist, Exponential& msgGenRateDist, const std::vector<int>& edges, int id);
     void SetNetwork(Network* _network);
-    void AddMessageToSource(Message* message);
     int GetQueueSize();
     void ReportStatistics();
     int getId() const;
 
     std::vector<int> edges;
+    void SetMyValues(double min, double mode, double max, double genRate, int numEdges);
+    DistributionValues myValues;
 private:
     // Event methods
     class GenerateMessageEA;
@@ -41,5 +52,3 @@ private:
     bool _available;
     Network* _computerNetwork;
 };
-
-#endif // COMPUTER_H

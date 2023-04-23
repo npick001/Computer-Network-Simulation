@@ -7,10 +7,13 @@
 using namespace std;
 
 void main() {
-	SimulationExecutive::InitializeSimulation();
 
 	Network network(RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA);
 	network.ReadFile("foo.txt");
 
-	SimulationExecutive::RunSimulation();
+	cout << endl << "Simulation Starting..." << endl << endl;
+	Time endTime = 1000;
+	SimulationExecutive::InitializeSimulation();
+
+	SimulationExecutive::RunSimulation(endTime);
 }

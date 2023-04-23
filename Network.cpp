@@ -118,8 +118,10 @@ void Network::parseGraphFromFile(const std::string& filename) {
         read_edges(file, num_edges, edges, num_nodes, i);
 
         Triangular serviceTimeDist(min, mode, max);
+        //std::cout << min << ", " << mode << ", " << max << std::endl;
         Exponential msgGenRateDist(msg_gen_rate);
         Computer computer(serviceTimeDist, msgGenRateDist, edges, node_id);
+        computer.SetMyValues(min, mode, max, msg_gen_rate, num_edges);
         addNode(computer);
         computer.SetNetwork(this);
     }
@@ -235,9 +237,9 @@ void Network::print_graph(const Network& _computerNetwork) {
         const auto& computer = _computerNetwork.nodes[i];
         std::cout << "Node " << i << ":\n";
 
-        std::cout << "  Service time (triangular): " << ", "
-                   << ", " << "\n";
-        std::cout << "  Message generation rate (exponential): " << "\n";
+        std::cout << "  Service time (triangular): " << computer.myValues._min << ", " << computer.myValues._mode
+                   << ", " << computer.myValues._max << "\n";
+        std::cout << "  Message generation rate (exponential): " << computer.myValues._messageGenRate << "\n";
 
         std::cout << "  Edges: ";
         for (size_t j = 0; j < computer.edges.size(); ++j) {

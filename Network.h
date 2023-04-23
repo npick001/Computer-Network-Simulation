@@ -29,6 +29,7 @@ public:
 
 private:
     static Computer* _computerNetwork;
+    double* _distributionValues;
     bool is_valid_node_index(int index, int num_nodes);
     int read_label(std::istream& in);
     void read_edges(std::istream& in, int num_edges, std::vector<int>& edges, int num_nodes, int current_node);

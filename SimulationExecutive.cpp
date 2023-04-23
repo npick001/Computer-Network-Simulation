@@ -22,7 +22,7 @@ public:
 	EventSet()
 	{
 		_numBins = 10;
-		_deltaT = 1;
+		_deltaT = 0.25;
 		_calQueue = new EventList*[_numBins];
 
 		// instantiate a number of lists and save in a single array
