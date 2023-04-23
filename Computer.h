@@ -19,10 +19,20 @@ public:
     void ReportStatistics();
     std::vector<int> edges;
     int getId() const;
+
+
+private:
     // Event methods
+    class GenerateMessageEA;
+    class ArriveEA;
+    class StartServiceEA;
+    class DoneServiceEA;
     void GenerateMessageEM();
     void ArriveEM(Message* message);
+    void StartServiceEM();
+    void DoneServiceEM(Message* message);
     void ProcessMessage(); // Add the ProcessMessage method declaration
+
     // Member variables
     Triangular& serviceTimeDist;
     Exponential& msgGenRateDist;
