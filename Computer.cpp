@@ -131,7 +131,6 @@ void Computer::GenerateMessageEM()
     // here we would add the different algorithms.
 
     std::cout << "Next computer ID: " << path[0] << std::endl;
-    // send to the next computer.
     _computerNetwork->nodes[path[0]].Arrive(message);
 
     // Schedule the routing event
