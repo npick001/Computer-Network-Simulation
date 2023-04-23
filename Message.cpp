@@ -10,6 +10,10 @@ Message::~Message()
 {
 }
 
+void Message::setDestination(Computer* computer) {
+    _destination = computer;
+}
+
 void Message::updateWaitTime(Time waitTime)
 {
     _waitTime += waitTime;

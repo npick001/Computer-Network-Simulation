@@ -17,9 +17,7 @@ public:
     void AddMessageToSource(Message* message);
     int GetQueueSize();
     void ReportStatistics();
-    std::vector<int> edges;
     int getId() const;
-
 
 private:
     // Event methods
@@ -34,11 +32,12 @@ private:
     void ProcessMessage(); // Add the ProcessMessage method declaration
 
     // Member variables
+    std::vector<int> edges;
     Triangular& serviceTimeDist;
     Exponential& msgGenRateDist;
     int _id;
     int _connectedEdges;
-    FIFO<Message>* _serviceQueue;
+    FIFO<Message*> _serviceQueue;
     bool _available;
     Distribution* _genRate;
     Network* _computerNetwork;

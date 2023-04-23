@@ -84,12 +84,12 @@ void Computer::GenerateMessageEM()
 {
     Time genTime = _genRate->GetRV();
 
-    // send to right place
     // Create a new message
+    int finalDestination = rand() % _computerNetwork->nodes.size();
     Message* message = new Message(&_computerNetwork->nodes[_id], &_computerNetwork->nodes[finalDestination], genTime);
 
     // Add the new message to the queue
-    _serviceQueue->AddEntity(message);
+    _serviceQueue.AddEntity(&message);
 
     // Schedule the routing event
     SimulationExecutive::ScheduleEventIn(genTime, new GenerateMessageEA(this));
@@ -97,12 +97,11 @@ void Computer::GenerateMessageEM()
 void Computer::StartServiceEM() {
 
     _available = false;
-
-    SimulationExecutive::ScheduleEventIn(_genRate->GetRV(), new DoneServiceEA(this, _serviceQueue->GetEntity()));
+    SimulationExecutive::ScheduleEventIn(_genRate->GetRV(), new DoneServiceEA(this, _serviceQueue.GetEntity()));
 }
 void Computer::ArriveEM(Message* message) {
 
-    _serviceQueue->AddEntity(message);
+    _serviceQueue.AddEntity(&message);
     if (_available) {
         SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
     }
@@ -114,16 +113,6 @@ void Computer::DoneServiceEM(Message* message) {
     if (_serviceQueue->GetSize() > 0) {
         SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
     }
-}
-
-void Computer::GenerateMessageEM() {
-    Time genTime = _genRate;
-    // Create a new message
-    Message* message = new Message(&_computerNetwork->nodes[_id], &_computerNetwork->nodes[finalDestination], genTime);
-    // Add the new message to the queue
-    _serviceQueue->AddEntity(*Message);
-    // Schedule the routing event
-    SimulationExecutive::ScheduleEventIn(0.0, new Network::routeMessage(*Message));
 }
 
 //router
