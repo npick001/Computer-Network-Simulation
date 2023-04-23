@@ -1,5 +1,5 @@
 #include "Stats.h"
-
+/*
 StatContainer::StatContainer()
 {
     _start = SimulationExecutive::GetSimulationTime();
@@ -20,3 +20,4 @@ Time StatContainer::LeaveQ(Time Lq)
 
     return(_exitQ - _enterQ);
 }
+*/

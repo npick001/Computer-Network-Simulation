@@ -11,12 +11,12 @@ public:
     Time LeaveQ(Time Lq);
 
 private:
-    Time _start, _end, _enterQ, _exitQ;     // Start/End Times
+    Time _start, _end;     // Start/End Times
     Time _enterQ, _exitQ, _QueueT;          // Queue arrival/departure times, and total queue time
     int _timesStopped;                      // number of wait times
 };
 
-
+/*
 class MsgStatSorter
 {
 public:
@@ -34,4 +34,4 @@ private:
 
 std::list<MsgStatSorter> StatSet;
 std::list<MsgStatSorter>::iterator StatItr;
-std::list<Computer*> ComputerSet;
+std::list<Computer*> ComputerSet;*/
