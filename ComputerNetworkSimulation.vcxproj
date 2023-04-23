@@ -129,7 +129,6 @@
   <ItemGroup>
     <ClCompile Include="Computer.cpp" />
     <ClCompile Include="Distribution.cpp" />
-    <ClCompile Include="EventSet.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="Network.cpp" />
