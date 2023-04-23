@@ -2,7 +2,7 @@
 #include "Stats.h"
 #include "Computer.h"
 #include "SimulationExecutive.h"
-
+class Computer;
 class Message
 {
 public:

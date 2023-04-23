@@ -3,7 +3,7 @@
 #include "FIFO.h"
 #include "Message.h"
 #include "SimulationExecutive.h"
-
+class Message;
 class Computer 
 {
 public:
