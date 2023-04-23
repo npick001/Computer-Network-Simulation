@@ -25,7 +25,7 @@ int Network::GetEdgeWeight(Computer* computer) {
     return computer->GetQueueSize();
 }
 
-void Network::addNode(const Computer& node) {
+void Network::addNode(Computer node) {
     nodes.push_back(node);
 }
 
@@ -235,6 +235,11 @@ std::vector<int> Network::weighted_shortest_path(int source) {
     }
 
     return prev;
+}
+
+int Network::GetNetworkSize()
+{
+    return nodes.size();
 }
 
 void Network::print_graph(const Network& _computerNetwork) {

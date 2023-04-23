@@ -44,7 +44,7 @@ private:
     void ArriveEM(Message* message);
     void StartServiceEM();
     void DoneServiceEM(Message* message);
-    void ProcessMessage(); // Add the ProcessMessage method declaration
+    void ProcessMessage();
 
     // Member variables
     Triangular* _serviceTimeDist;
@@ -53,5 +53,5 @@ private:
     int _connectedEdges;
     FIFO<Message>* _serviceQueue;
     bool _available;
-    Network* _computerNetwork;
+    static Network* _computerNetwork;
 };
