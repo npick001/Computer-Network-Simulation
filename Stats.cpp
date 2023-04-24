@@ -13,18 +13,18 @@ void StatsHolder::ReportStats()
 	MSGItr = MSGList.begin();
 	PCItr = PCList.begin();
 
-		std::cout << "Message Statistics:\n";
+		std::cout << "\nMessage Statistics:\n";
 		for (int i = 0; i < MSGList.size(); i++)
 			{
 			MSGQT += (*MSGItr)->getWaitTime();
 			MSGCt += (*MSGItr)->getCommTime();
 			if (input == 'Y' || input == 'y')
 			{
-				std::cout << "STATS FOR MESSAGE: " << (*MSGItr)->getID() << " - Total Time in Queues: " << (*MSGItr)->getWaitTime() << ", Total Communication Time: " << (*MSGItr)->getCommTime() << std::endl;
+				std::cout << "STATS FOR MESSAGE " << (*MSGItr)->getID() << ":\n\t- Total Time in Queues: " << (*MSGItr)->getWaitTime() << "\n\t- Total Communication Time: " << (*MSGItr)->getCommTime() << std::endl;
 			}
 				MSGItr++;
-			}
-		std::cout << "Computer Statistics:\n";
+		}
+		std::cout << "\nComputer Statistics:\n";
 		for (int j = 0; j < PCList.size(); j++)
 		{
 			PCAVGPT += (*PCItr)->getAvgTime();
@@ -32,12 +32,8 @@ void StatsHolder::ReportStats()
 			QAvgS += (*PCItr)->_serviceQueue->getAvgSize();
 			QWait += (*PCItr)->_serviceQueue->getAvgTime();
 			if ((*PCItr)->_serviceQueue->getMax() > QAvgM) { QAvgM = (*PCItr)->_serviceQueue->getMax(); }
-			if (input == 'Y' || input == 'y')
-			{
-				std::cout << "STATS FOR COMPUTER: " << (*PCItr)->getId() << " - Average Processing Time: " << (*PCItr)->getAvgTime() << ", Utilization %: " << (*PCItr)->getUsage() << std::endl;
-				std::cout << "\tStats for the Queue - Average Size:" << (*PCItr)->_serviceQueue->getAvgSize() << " Maximum Size: " << (*PCItr)->_serviceQueue->getMax() << " Average Wait Time:" << (*PCItr)->_serviceQueue->getAvgTime() << std::endl;
-			}
-			
+			std::cout << "COMPUTER " << (*PCItr)->getId() << " STATS:\n\t- Average Processing Time: " << (*PCItr)->getAvgTime() << "\n\t- % Utilization: " << (*PCItr)->getUsage() << std::endl;
+			std::cout << "- QUEUE STATS:\n\t- Average Size: " << (*PCItr)->_serviceQueue->getAvgSize() << "\n\t- Maximum Size: " << (*PCItr)->_serviceQueue->getMax() << "\n\t- Average Wait Time: " << (*PCItr)->_serviceQueue->getAvgTime() << std::endl;
 			PCItr++;
 		}
 		MSGQT /= MSGList.size();
@@ -48,14 +44,14 @@ void StatsHolder::ReportStats()
 		PCAVGPT /= PCList.size();
 		std::cout
 			<< "\nFor all in the network:\n"
-			<< " Computer:"
-			<< "\n\t Computer Average Processing Time: " << PCAVGPT
-			<< "\n\t Computer Utilization: " << Usage << "%"
+			<< " Computers:"
+			<< "\n\t- Average Processing Time: " << PCAVGPT
+			<< "\n\t- Utilization: " << Usage << "%"
 			<< "\n Queues:"
-			<< "\n\t Average Queue Size: " << QAvgS
-			<< "\n\t Maximum Queue Size: " << QAvgM
-			<< "\n\t Average Queue Time: " << QWait
+			<< "\n\t- Average Size: " << QAvgS
+			<< "\n\t- Maximum Size: " << QAvgM
+			<< "\n\t- Average Time: " << QWait
 			<< "\n Messages:"
-			<< "\n\t Average Communication Time: " << MSGCt
-			<< "\n\t Average Wait Time: " << MSGQT;
+			<< "\n\t- Average Communication Time: " << MSGCt
+			<< "\n\t- Average Wait Time: " << MSGQT;
 }

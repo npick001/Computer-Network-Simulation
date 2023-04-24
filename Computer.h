@@ -7,6 +7,8 @@
 #include "FIFO.h"
 #include <vector>
 
+#define SIM_OUTPUT 0
+
 class Network;
 class StatsHolder;
 struct DistributionValues {

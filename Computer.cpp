@@ -159,7 +159,10 @@ void Computer::GenerateMessageEM()
 
     // use path to determine where it is going.
     ProcessMessage(message);
+#if SIM_OUTPUT
     std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": sending to Computer " << message->getDestination()->getId() << "." << std::endl;
+#endif // SIM_OUTPUT
+
     ScheduleEventIn(genTime, new SendMessageEA(this, message));
     ScheduleEventIn(genTime, new GenerateMessageEA(this));
 };
@@ -171,12 +174,18 @@ void Computer::StartServiceEM() {
 
     if (!_serviceQueue->IsEmpty()) {
         Message* message = _serviceQueue->GetEntity();
+#if SIM_OUTPUT
         std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": Start Service." << std::endl;
+#endif // SIM_OUTPUT
+
         Time serviceTime = _serviceTimeDist->GetRV();
         _totalService += serviceTime;
         int finalDestination = message->getDestination()->getId();
         if (finalDestination == _id) {
+#if SIM_OUTPUT
             std::cout << "Time: " << GetSimulationTime() << " deleting" << " Message when " << GetSimulationTime() + serviceTime << std::endl;
+#endif // SIM_OUTPUT
+
             _st->addMSG(message);
             message->setEnd(GetSimulationTime());
         }
@@ -198,7 +207,10 @@ void Computer::ArriveEM(Message* message) {
 void Computer::DoneServiceEM(Message* message) {
 
     _busy = false;
+#if SIM_OUTPUT
     std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": Done Service." << std::endl;
+#endif // SIM_OUTPUT
+
     if ((this->GetQueueSize() > 0) && (!_reserved)) {
         ScheduleEventIn(0.0, new StartServiceEA(this));
     }
@@ -220,16 +232,22 @@ void Computer::ProcessMessage(Message* message) {
         int nextDestinationId = path[1];
         _nextComputer = &_computerNetwork->nodes[nextDestinationId];
         // Route the message to the next computer in the network
+#if SIM_OUTPUT
         std::cout << "Routing message from node " << _id << " to node " << nextDestinationId << std::endl;
+#endif // SIM_OUTPUT
     }
     else {
+#if SIM_OUTPUT
         std::cout << "No path exists between node " << _id << " and node " << finalDestination << std::endl;
+#endif // SIM_OUTPUT
     }
 }
 
 void Computer::SendMessageEM(Message* message)
 {
+#if SIM_OUTPUT
     std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << " sending to " << message->getDestination()->getId() << std::endl;
+#endif // SIM_OUTPUT
     _nextComputer->Arrive(message);
 }
 

@@ -238,7 +238,7 @@ std::vector<int> Network::weighted_shortest_path(int source) {
         const Computer& curr_computer = nodes[u];
 
         for (int v : curr_computer._edges) {
-            int alt = dist[u] + GetEdgeWeight(&nodes[v]) + nodes[v].GetQueueSize();
+            int alt = dist[u] + GetEdgeWeight(&nodes[v]);
 
             if (alt < dist[v]) {
                 dist[v] = alt;

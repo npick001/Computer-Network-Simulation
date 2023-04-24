@@ -12,6 +12,7 @@ void main() {
 	Time endTime = 1000;
 	InitializeSimulation();
 
+	//Network network(RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA);
 	Network network(RoutingAlgorithm::WEIGHTED_SHORTEST_PATH);
 	network.SetStats(sh);
 	network.ReadFile("foo.txt");
