@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include "SimulationExecutive.h"
-#include "Message.h"
 
 /**************************
 
@@ -18,25 +17,6 @@ public:
 		_tail = 0;
 		_size = 0;
 		_name = name;
-		totalQ = 0;
-		max = 0;
-		count = 0;
-		avgsize = 0;
-	}
-
-	int getAvgSize()
-	{
-		return avgsize / count;
-	}
-
-	int getMax()
-	{
-		return max;
-	}
-
-	Time getAvgTime()
-	{
-		return totalQ / count;
 	}
 
 	void AddEntity(T* t)
@@ -49,15 +29,9 @@ public:
 			_tail = _tail->next = node;
 		}
 
-		std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+		std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
-		count++;
-			if (_size >= max)
-			{
-				max = _size;
-			}
-		std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
-		((Message*)t)->EnterQ(SimulationExecutive::GetSimulationTime());
+		std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 	}
 
 	T* GetEntity()
@@ -69,11 +43,9 @@ public:
 			_head = _head->next;
 			//			delete n;
 
-			std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+			std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
-			avgsize += _size;
-			std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
-			totalQ += ((Message*)t)->LeaveQ(SimulationExecutive::GetSimulationTime());
+			std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 
 			return t;
 		}
@@ -97,10 +69,8 @@ private:
 		Node* next;
 	};
 
-
 	Node* _head;
 	Node* _tail;
-	int _size,max, count, avgsize;
-	Time totalQ;
+	int _size;
 	std::string _name;
 };
