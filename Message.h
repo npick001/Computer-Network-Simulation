@@ -26,6 +26,6 @@ private:
     Time _destinationTime;
     Time _waitTime;
 
-	StatContainer* _stats;
+	StatHolder* _stats;
 	int _timesStopped; // number of wait times
 };

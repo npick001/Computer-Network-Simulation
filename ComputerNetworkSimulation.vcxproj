@@ -39,6 +39,7 @@
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="SimulationExecutive.cpp" />
+    <ClCompile Include="Stats.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
