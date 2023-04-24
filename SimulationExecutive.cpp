@@ -186,55 +186,34 @@ private:
 SimulationExecutive::EventSet SimulationExecutive::_eventSet;
 Time SimulationExecutive::_simTime = 0.0;
 
-void SimulationExecutive::InitializeSimulation()
+void InitializeSimulation()
 {
-	_simTime = 0.0;
-	_eventSet = SimulationExecutive::EventSet();
+	SimulationExecutive::InitializeSimulation();
 }
 
-Time SimulationExecutive::GetSimulationTime()
+Time GetSimulationTime()
 {
-	return _simTime;
+	return SimulationExecutive::GetSimulationTime();
 }
 
-void SimulationExecutive::RunSimulation()
+void RunSimulation()
 {
-	while (_eventSet.HasEvent()) {
-		_simTime = _eventSet.GetTime();
-		EventAction* ea = _eventSet.GetEventAction();
-		ea->Execute();
-		delete ea;
-	}
+	SimulationExecutive::RunSimulation();
 }
 
-void SimulationExecutive::RunSimulation(Time endTime)
+void RunSimulation(Time endTime)
 {
-	while (_eventSet.HasEvent() && _simTime <= endTime) {
-		_simTime = _eventSet.GetTime();
-		EventAction* ea = _eventSet.GetEventAction();
-		ea->Execute();
-
-		_eventSet.PrintEventLists();
-
-		delete ea;
-	}
+	SimulationExecutive::RunSimulation(endTime);
 }
 
-void SimulationExecutive::ScheduleEventIn(Time delta, EventAction* ea)
+void ScheduleEventIn(Time delta, EventAction*ea)
 {
-	_eventSet.AddEvent(_simTime + delta, ea);
+	SimulationExecutive::ScheduleEventIn(delta, ea);
 }
 
-void SimulationExecutive::ScheduleEventAt(Time time, EventAction* ea)
+void ScheduleEventAt(Time time, EventAction*ea)
 {
-	_eventSet.AddEvent(time, ea);
+	SimulationExecutive::ScheduleEventAt(time, ea);
 }
 
-void SimulationExecutive::SetBinSize(Time t)
-{
-	_eventSet.SetDeltaT(t);
-}
 
-void SimulationExecutive::SetNumBins(int NumBins) {
-	_eventSet.SetNumBins(NumBins);
-}
