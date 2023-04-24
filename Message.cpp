@@ -1,6 +1,6 @@
 #include "Message.h"
 #include "Computer.h"
-int Message::NextID = 0;
+int NextID = 0;
 
 Message::Message(Computer* source, Computer* destination, Time creationTime)
 {

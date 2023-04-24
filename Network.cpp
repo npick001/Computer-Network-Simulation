@@ -31,7 +31,7 @@ int Network::GetEdgeWeight(Computer* computer) {
 
 void Network::addNode(Computer node) {
     nodes.push_back(node);
-    _st->addPC(&node);
+   // _st->addPC(&node);
 }
 
 bool Network::is_valid_node_index(int index, int num_nodes) {
@@ -71,6 +71,13 @@ void Network::read_edges(std::istream& in, int num_edges, std::vector<int>& edge
         if (!(edge_iss >> edges[j]) || !is_valid_node_index(edges[j], num_nodes) || edges[j] == current_node) {
             throw std::runtime_error("Invalid edge data");
         }
+    }
+}
+void Network::addNodestoStat()
+{
+    for (int i = 0; i < nodes.size(); i++)
+    {
+        _st->addPC(&nodes[i]);
     }
 }
 

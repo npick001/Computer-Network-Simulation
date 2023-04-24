@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include "SimulationExecutive.h"
-
+#include "Message.h"
 /**************************
 
 FIFO Queue, with added functionality.
@@ -22,19 +22,18 @@ public:
 		_cdfWaits = 0;
 	}
 
-	Time getAvgTime()
+	double getAvgTime()
 	{
-		if (_total == 0) return 0;
-		else return _cdfWaits / _total;
+		return _cdfWaits / _total;
 	}
 
 	double getAvgSize()
 	{
-		if (_total == 0) return 0;
-		else return _sumSizes / _total;
+		double temp = (_sumSizes / _total);
+		return temp;
 	}
 
-	int getMax()
+	double getMax()
 	{
 		return _max;
 	}
@@ -49,14 +48,14 @@ public:
 			_tail = _tail->next = node;
 		}
 
-		std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+		//std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
 		if (_size > _max)
 		{
 			_max = _size;
 		}
 		_total++;
-		std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+		//std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		((Message*)t)->EnterQ(GetSimulationTime());
 	}
 
@@ -69,9 +68,9 @@ public:
 			_head = _head->next;
 			//			delete n;
 
-			std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+			//std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
-			std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+		//	std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_cdfWaits += ((Message*)t)->LeaveQ(GetSimulationTime());
 			_sumSizes += _size;
 			return t;
@@ -98,7 +97,8 @@ private:
 
 	Node* _head;
 	Node* _tail;
-	int _size, _max, _count, _cdfWaits, _total, _sumSizes;
-	Time total;
+	int _size, _max, _count, _sumSizes;
+	double  _total;
+	Time total, _cdfWaits;
 	std::string _name;
 };

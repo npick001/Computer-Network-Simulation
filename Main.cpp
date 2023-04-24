@@ -21,5 +21,6 @@ void main() {
 
 	RunSimulation(endTime);
 
+	network.addNodestoStat();
 	sh->ReportStats();
 }

@@ -30,6 +30,7 @@ public:
     std::vector<int>weighted_shortest_path(int source);
     int GetNetworkSize();
     void SetStats(StatsHolder* st);
+    void addNodestoStat();
 private:
 
     StatsHolder* _st;

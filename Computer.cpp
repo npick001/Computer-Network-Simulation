@@ -132,7 +132,7 @@ Time Computer::getAvgTime()
 
 double Computer::getUsage()
 {
-    return _totalService / GetSimulationTime();
+    return (_totalService / GetSimulationTime())*100;
 }
 
 void Computer::SetNetwork(Network* network) {
@@ -184,6 +184,7 @@ void Computer::StartServiceEM() {
         Message* message = _serviceQueue->GetEntity();
         std::cout << "Time: " << GetSimulationTime() << "Computer " << _id << "\tStart Service." << std::endl;
         Time serviceTime = _serviceTimeDist->GetRV();
+        _totalService += serviceTime;
         int finalDestination = message->getDestination()->getId();
         if (finalDestination == _id) {
             std::cout << "Time: " << GetSimulationTime() << "\tdeleting" << " Message when " << GetSimulationTime() + serviceTime << std::endl;
@@ -193,7 +194,6 @@ void Computer::StartServiceEM() {
         }
         else {
             ProcessMessage(message);
-
             ScheduleEventIn(serviceTime, new SendMessageEA(this, message));
 
 
@@ -205,7 +205,7 @@ void Computer::StartServiceEM() {
     }
 }
 void Computer::ArriveEM(Message* message) {
-
+    _numServed++;
     _serviceQueue->AddEntity(message);
     if ((!_busy) && (!_reserved)) {
         _reserved = true;
