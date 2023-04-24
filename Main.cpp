@@ -10,7 +10,7 @@ void main() {
 
 
 	Time endTime = 1000;
-	InitializeSimulation();
+	SimulationExecutive::InitializeSimulation();
 
 	Network network(RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA);
 	network.ReadFile("foo.txt");
@@ -18,5 +18,5 @@ void main() {
 	cout << endl << "Simulation Starting..." << endl << endl;
 
 
-	RunSimulation(endTime);
+	SimulationExecutive::RunSimulation(endTime);
 }

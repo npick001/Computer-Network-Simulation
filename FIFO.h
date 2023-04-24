@@ -29,9 +29,9 @@ public:
 			_tail = _tail->next = node;
 		}
 
-		std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+		std::cout << SimulationExecutive::GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
-		std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+		std::cout << SimulationExecutive::GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 	}
 
 	T* GetEntity()
@@ -43,9 +43,9 @@ public:
 			_head = _head->next;
 			//			delete n;
 
-			std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+			std::cout << SimulationExecutive::GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
-			std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+			std::cout << SimulationExecutive::GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 
 			return t;
 		}

@@ -1,23 +1,35 @@
 #include "Message.h"
 #include "Computer.h"
-int Message::nextID = 0;
+
 Message::Message(Computer* source, Computer* destination, Time creationTime)
 {
 	_source = source;
 	_destination = destination;
-	_start = creationTime;
-	_QueueT = 0;
+	_creationTime = creationTime;
+	_destinationTime = -1;
+	_waitTime = 0;
 	_timesStopped = 0;
-    ID = nextID++;
-}
-
-bool Message::operator<(const Message& m) const
-{
-    return ID < m.ID;
 }
 
 Message::~Message()
 {
+}
+
+void Message::updateWaitTime(Time waitTime)
+{
+    _waitTime += waitTime;
+    _timesStopped++;
+}
+
+void Message::reportStatistics() const
+{
+    std::cout << "Message statistics:" << std::endl;
+    std::cout << "  Source: " << _source << std::endl;
+    std::cout << "  Destination: " << _destination << std::endl;
+    std::cout << "  Creation time: " << _creationTime << std::endl;
+    std::cout << "  Destination time: " << _destinationTime << std::endl;
+    std::cout << "  Wait time: " << _waitTime << std::endl;
+    std::cout << "  Times stopped: " << _timesStopped << std::endl;
 }
 
 Computer* Message::getSource() const
@@ -32,30 +44,4 @@ Computer* Message::getDestination() const
 
 void Message::setDestination(Computer* computer) {
     _destination = computer;
-}
-
-void Message::EnterQ(Time Eq)
-{
-    _enterQ = Eq;
-    _timesStopped++;
-}
-
-Time Message::LeaveQ(Time Lq)
-{
-    _exitQ = Lq;
-    _QueueT += (_exitQ - _enterQ);
-
-    return(_exitQ - _enterQ);
-}
-
-void Message::ReachEnd()
-{
-    _end = SimulationExecutive::GetSimulationTime();
-    this->ComputeStats();
-}
-
-void Message::ComputeStats()
-{
-    commsTime = _end - _start;
-    avgWait = _QueueT / _timesStopped;
 }

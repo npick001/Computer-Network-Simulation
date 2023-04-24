@@ -25,7 +25,7 @@ int Network::GetEdgeWeight(Computer* computer) {
     return computer->GetQueueSize();
 }
 
-void Network::addNode(const Computer& node) {
+void Network::addNode(Computer node) {
     nodes.push_back(node);
 }
 
@@ -121,9 +121,7 @@ void Network::parseGraphFromFile(const std::string& filename) {
         Triangular* serviceTimeDist = new Triangular(min, mode, max);
         //std::cout << min << ", " << mode << ", " << max << std::endl;
         Exponential* msgGenRateDist = new Exponential(msg_gen_rate);
-        Computer computer(serviceTimeDist, msgGenRateDist, edges, node_id);     //Instantiates new computer
-        computer.SetStat(_st);
-        _st->addPC(&computer);
+        Computer computer(serviceTimeDist, msgGenRateDist, edges, node_id);
         computer.SetMyValues(min, mode, max, msg_gen_rate, num_edges);
         addNode(computer);
         computer.SetNetwork(this);
@@ -237,6 +235,11 @@ std::vector<int> Network::weighted_shortest_path(int source) {
     }
 
     return prev;
+}
+
+int Network::GetNetworkSize()
+{
+    return nodes.size();
 }
 
 void Network::print_graph(const Network& _computerNetwork) {
