@@ -28,7 +28,6 @@ public:
     void Arrive(Message* message);
     void SetNetwork(Network* network);
     int GetQueueSize();
-    void ReportStatistics();
     int getId() const;
     void setStat( StatsHolder* st);
     bool operator<(const Computer& c) const { return _id < c._id; }
@@ -38,9 +37,7 @@ public:
     void SetMyValues(double min, double mode, double max, double genRate, int numEdges);
     DistributionValues myValues;
     FIFO<Message>* _serviceQueue;
-
-    
-    int test = 123;
+        
 private:
     // Event methods
     class GenerateMessageEA;

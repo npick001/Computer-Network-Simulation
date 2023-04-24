@@ -8,7 +8,7 @@ void StatsHolder::ReportStats()
 	Time MSGQT=0, MSGCt = 0;
 	Time PCAVGPT=0, QWait = 0;
 	double Usage=0, QAvgS=0, QAvgM = 0;
-	std::cout << "Wouuld you like a detailed Description? (Y/N): ";
+	std::cout << "Would you like a detailed Description? (Y/N): ";
 	std::cin >> input;
 	MSGItr = MSGList.begin();
 	PCItr = PCList.begin();

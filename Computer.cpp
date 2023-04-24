@@ -2,7 +2,7 @@
 #include "Network.h"
 #include "SimulationExecutive.h"
 #include "FIFO.h"
-#include <random>// Include the FIFO header
+#include <random>
 
 Network* Computer::_computerNetwork = 0;
 
@@ -26,10 +26,6 @@ DistributionValues::DistributionValues(double min, double mode, double max, doub
 
 int Computer::GetQueueSize() {
     return _serviceQueue->GetSize();
-}
-
-void Computer::ReportStatistics()
-{
 }
 
 class Computer::GenerateMessageEA : public EventAction
@@ -161,17 +157,10 @@ void Computer::GenerateMessageEM()
     Message* message = new Message(&_computerNetwork->nodes[_id], &_computerNetwork->nodes[finalDestination], t);
     Time genTime = _msgGenRateDist->GetRV();
 
-    // u   se path to determine where it is going.
+    // use path to determine where it is going.
     ProcessMessage(message);
-    std::cout << "Time: " << GetSimulationTime() << "Computer " << _id << ": sending to \tComputer " << message->getDestination()->getId() << "." << std::endl;
+    std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": sending to Computer " << message->getDestination()->getId() << "." << std::endl;
     ScheduleEventIn(genTime, new SendMessageEA(this, message));
-    // here we would add the different algorithms.
-
-    //std::cout << "Next computer ID: " << path[0] << std::endl;
-    //_computerNetwork->nodes[path[0]].Arrive(message);
-
-    // Schedule the routing event
-
     ScheduleEventIn(genTime, new GenerateMessageEA(this));
 };
 
@@ -182,26 +171,20 @@ void Computer::StartServiceEM() {
 
     if (!_serviceQueue->IsEmpty()) {
         Message* message = _serviceQueue->GetEntity();
-        std::cout << "Time: " << GetSimulationTime() << "Computer " << _id << "\tStart Service." << std::endl;
+        std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": Start Service." << std::endl;
         Time serviceTime = _serviceTimeDist->GetRV();
         _totalService += serviceTime;
         int finalDestination = message->getDestination()->getId();
         if (finalDestination == _id) {
-            std::cout << "Time: " << GetSimulationTime() << "\tdeleting" << " Message when " << GetSimulationTime() + serviceTime << std::endl;
+            std::cout << "Time: " << GetSimulationTime() << " deleting" << " Message when " << GetSimulationTime() + serviceTime << std::endl;
             _st->addMSG(message);
             message->setEnd(GetSimulationTime());
-
         }
         else {
             ProcessMessage(message);
             ScheduleEventIn(serviceTime, new SendMessageEA(this, message));
-
-
         }
         ScheduleEventIn(serviceTime, new DoneServiceEA(this, _serviceQueue->GetEntity()));
-
-
-
     }
 }
 void Computer::ArriveEM(Message* message) {
@@ -215,7 +198,7 @@ void Computer::ArriveEM(Message* message) {
 void Computer::DoneServiceEM(Message* message) {
 
     _busy = false;
-    std::cout << "Time: " << GetSimulationTime() << "Computer " << _id << "\tDone Service." << " at " << GetSimulationTime() << std::endl;
+    std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": Done Service." << std::endl;
     if ((this->GetQueueSize() > 0) && (!_reserved)) {
         ScheduleEventIn(0.0, new StartServiceEA(this));
     }
@@ -246,7 +229,7 @@ void Computer::ProcessMessage(Message* message) {
 
 void Computer::SendMessageEM(Message* message)
 {
-    std::cout << "Time: " << GetSimulationTime() << "Computer " << _id << " sending to " << message->getDestination()->getId() << std::endl;
+    std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << " sending to " << message->getDestination()->getId() << std::endl;
     _nextComputer->Arrive(message);
 }
 
