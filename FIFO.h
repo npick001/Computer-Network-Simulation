@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "SimulationExecutive.h"
+#include "Message.h"
 
 /**************************
 
@@ -17,6 +18,25 @@ public:
 		_tail = 0;
 		_size = 0;
 		_name = name;
+		totalQ = 0;
+		max = 0;
+		count = 0;
+		avgsize = 0;
+	}
+
+	int getAvgSize()
+	{
+		return avgsize / count;
+	}
+
+	int getMax()
+	{
+		return max;
+	}
+
+	Time getAvgTime()
+	{
+		return totalQ / count;
 	}
 
 	void AddEntity(T* t)
@@ -31,7 +51,13 @@ public:
 
 		std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
+		count++;
+			if (_size >= max)
+			{
+				max = _size;
+			}
 		std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+		((Message*)t)->EnterQ(SimulationExecutive::GetSimulationTime());
 	}
 
 	T* GetEntity()
@@ -45,7 +71,9 @@ public:
 
 			std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
+			avgsize += _size;
 			std::cout << SimulationExecutive::GetSimulationTime() << ", queue " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+			totalQ += ((Message*)t)->LeaveQ(SimulationExecutive::GetSimulationTime());
 
 			return t;
 		}
@@ -69,8 +97,10 @@ private:
 		Node* next;
 	};
 
+
 	Node* _head;
 	Node* _tail;
-	int _size;
+	int _size,max, count, avgsize;
+	Time totalQ;
 	std::string _name;
 };

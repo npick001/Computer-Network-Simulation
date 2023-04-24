@@ -6,27 +6,26 @@
 #include <iostream>
 
 class Computer;
-class StatContainer;
 class Message
 {
 public:
     Message(Computer* source, Computer* destination, Time creationTime);
     ~Message();
-
-    void updateWaitTime(Time waitTime);
-    void reportStatistics() const;
-
+    void ComputeStats();
+    void EnterQ(Time E);
+    Time LeaveQ(Time L);
+    void ReachEnd();
+    bool operator<(const Message& m) const;
     void setDestination(Computer* computer);
     Computer* getSource() const;
     Computer* getDestination() const;
 private:
     Computer* _source;
     Computer* _destination;
-
-    Time _creationTime;
-    Time _destinationTime;
-    Time _waitTime;
-
-	StatContainer* _stats;
-	int _timesStopped; // number of wait times
+    Time _start, _end;                      // Start/End Times
+    Time _enterQ, _exitQ, _QueueT;          // Queue arrival/departure times, and total queue time
+    int _timesStopped,ID;                      // number of wait times
+    static int nextID;
+    Time avgWait;
+    Time commsTime;
 };

@@ -121,7 +121,9 @@ void Network::parseGraphFromFile(const std::string& filename) {
         Triangular* serviceTimeDist = new Triangular(min, mode, max);
         //std::cout << min << ", " << mode << ", " << max << std::endl;
         Exponential* msgGenRateDist = new Exponential(msg_gen_rate);
-        Computer computer(serviceTimeDist, msgGenRateDist, edges, node_id);
+        Computer computer(serviceTimeDist, msgGenRateDist, edges, node_id);     //Instantiates new computer
+        computer.SetStat(_st);
+        _st->addPC(&computer);
         computer.SetMyValues(min, mode, max, msg_gen_rate, num_edges);
         addNode(computer);
         computer.SetNetwork(this);

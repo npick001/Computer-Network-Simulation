@@ -5,7 +5,7 @@
 #include <istream>
 class Computer;
 class Message;
-
+class StatsHolder;
 enum class RoutingAlgorithm {
     EQUAL_WEIGHT_DIJKSTRA,
     WEIGHTED_SHORTEST_PATH
@@ -23,11 +23,13 @@ public:
     int GetEdgeWeight(Computer* computer);
     void addNode(const Computer& node);
     void parseGraphFromFile(const std::string& filename);
+    void setStats(StatsHolder* st) { _st = st; }
     std::vector<int>equal_weight_dijkstra(int source);
     std::vector<int>getShortestPath(int source, int destination, const std::vector<int>& prev);
     std::vector<int>weighted_shortest_path(int source);
 
 private:
+    StatsHolder* _st;
     //static Computer* _computerNetwork;
     double* _distributionValues;
     bool is_valid_node_index(int index, int num_nodes);

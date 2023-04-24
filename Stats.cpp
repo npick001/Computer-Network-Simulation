@@ -1,23 +1,23 @@
 #include "Stats.h"
-/*
-StatContainer::StatContainer()
-{
-    _start = SimulationExecutive::GetSimulationTime();
-    _timesStopped = 0;
-    _QueueT = 0;
-}
+#include <fstream>
+#include <iostream>
 
-void StatContainer::EnterQ(Time Eq)
+void StatsHolder::ReportStats()
 {
-    _enterQ = Eq;
+	MSGList.sort();
+	MSGItr = MSGList.begin();
+	PCList.sort();
+	PCItr = PCList.begin();
+	for (int i = 0; i < PCList.size(); i++)
+	{
+		std::cout
+			<< "Computer Statistics:\n"
+			<< "Computer " << (*PCItr)->getId() << ":"
+			<< "\n	Average Processing Time:" << (*PCItr)->getAvgTime()
+			<< "\n  Utilization:" << (*PCItr)->getUsage() 
+			<< "\n		Queue Stats:"
+			<< "\n			Average Queue Time: " << (*PCItr)->GetFIFO()->getAvgTime()
+			<< "\n			Average Queue Size: " << (*PCItr)->GetFIFO()->getAvgSize()
+			<< "\n			Max Queue Size: " << (*PCItr)->GetFIFO()->getMax();
+	}
 }
-
-Time StatContainer::LeaveQ(Time Lq)
-{
-    _exitQ = Lq;
-    _QueueT += (_exitQ - _enterQ);
-    _timesStopped++;
-
-    return(_exitQ - _enterQ);
-}
-*/

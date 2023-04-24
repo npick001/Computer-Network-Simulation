@@ -25,10 +25,6 @@ int Computer::GetQueueSize() {
     return _serviceQueue->GetSize();
 }
 
-void Computer::ReportStatistics()
-{
-}
-
 class Computer::GenerateMessageEA : public EventAction
 {
 public:
@@ -93,10 +89,17 @@ Computer::Computer(Triangular* serviceTimeDist, Exponential* msgGenRateDist, con
     _serviceTimeDist = serviceTimeDist;
     _msgGenRateDist = msgGenRateDist;
     _edges = edges;
+    totalService = 0;
+    numServed = 0;
     _id = id;
     _connectedEdges = 0;
     _serviceQueue = new FIFO<Message>("Service Queue"); // Create an instance of the FIFO class
     _available = true;
+}
+
+bool Computer::operator<(const Computer& c) const
+{
+    return _id < c.getId();
 }
 
 void Computer::SetNetwork(Network* network) {
@@ -134,10 +137,11 @@ void Computer::StartServiceEM() {
     ProcessMessage();
 
     Time serviceTime = _serviceTimeDist->GetRV();
+    totalService += serviceTime;
     SimulationExecutive::ScheduleEventIn(serviceTime, new DoneServiceEA(this, _serviceQueue->GetEntity()));
 }
 void Computer::ArriveEM(Message* message) {
-
+    numServed++;
     _serviceQueue->AddEntity(message);
     if (_available) {
         SimulationExecutive::ScheduleEventIn(0.0, new StartServiceEA(this));
@@ -162,7 +166,7 @@ void Computer::ProcessMessage() {
             // The message has arrived at its final destination, handle the arrived message as needed
             // (e.g., log, update statistics, etc.)
             //arrive service action here
-            delete message; // Delete the message after processing
+            _st->addMSG(message);
         } else {
             // Get the shortest path for routing
             std::vector<int> prev;

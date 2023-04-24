@@ -28,12 +28,16 @@ public:
     void Arrive(Message* message);
     void SetNetwork(Network* network);
     int GetQueueSize();
+    bool operator<(const Computer& c) const;
     void ReportStatistics();
+    void SetStat(StatsHolder* st) { _st = st; }
+    FIFO<Message>* GetFIFO() { return _serviceQueue; }
     int getId() const;
-
     std::vector<int> _edges;
     void SetMyValues(double min, double mode, double max, double genRate, int numEdges);
     DistributionValues myValues;
+    Time getAvgTime() { return totalService / numServed; }
+    double getUsage() { return (totalService / SimulationExecutive::GetSimulationTime())*100; }
 private:
     // Event methods
     class GenerateMessageEA;
@@ -47,6 +51,9 @@ private:
     void ProcessMessage(); // Add the ProcessMessage method declaration
 
     // Member variables
+    Time totalService;
+    StatsHolder* _st;
+    int numServed;
     Triangular* _serviceTimeDist;
     Exponential* _msgGenRateDist;
     int _id;

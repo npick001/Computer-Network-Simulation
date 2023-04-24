@@ -3,35 +3,24 @@
 #include "SimulationExecutive.h"
 #include "Computer.h"
 
-class StatContainer
+class Computer;
+class Message;
+class StatsHolder
 {
 public:
-    StatContainer();
-    void EnterQ(Time Eq);
-    Time LeaveQ(Time Lq);
-
+	StatsHolder(){}
+	void addPC(Computer* c)
+	{
+		PCList.push_back(c);
+	}
+	void addMSG(Message* m)
+	{
+		MSGList.push_back(m);
+	}
+	void ReportStats();
 private:
-    Time _start, _end;     // Start/End Times
-    Time _enterQ, _exitQ, _QueueT;          // Queue arrival/departure times, and total queue time
-    int _timesStopped;                      // number of wait times
+	std::list<Computer*> PCList;
+	std::list<Computer*>::iterator PCItr;
+	std::list<Message*> MSGList;
+	std::list<Message*>::iterator MSGItr;
 };
-
-/*
-class MsgStatSorter
-{
-public:
-    MsgStatSorter(int ID, StatContainer sc)
-    {
-        _id = ID;
-        _stats = sc;
-    }
-    int GetID() { return _id; }
-    StatContainer GetStatContainer() { return _stats }
-private:
-    int _id;
-    StatContainer _stats;
-};
-
-std::list<MsgStatSorter> StatSet;
-std::list<MsgStatSorter>::iterator StatItr;
-std::list<Computer*> ComputerSet;*/
