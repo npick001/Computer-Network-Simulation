@@ -1,10 +1,12 @@
 #pragma once
 #include "Computer.h"
+#include "Stats.h"
 #include <string>
 #include <vector>
 #include <istream>
 class Computer;
 class Message;
+class StatsHolder;
 
 enum class RoutingAlgorithm {
     EQUAL_WEIGHT_DIJKSTRA,
@@ -27,8 +29,11 @@ public:
     std::vector<int>getShortestPath(int source, int destination, const std::vector<int>& prev);
     std::vector<int>weighted_shortest_path(int source);
     int GetNetworkSize();
-
+    void SetStats(StatsHolder* st);
+    void addNodestoStat();
 private:
+
+    StatsHolder* _st;
     bool is_valid_node_index(int index, int num_nodes);
     int read_label(std::istream& in);
     void read_edges(std::istream& in, int num_edges, std::vector<int>& edges, int num_nodes, int current_node);

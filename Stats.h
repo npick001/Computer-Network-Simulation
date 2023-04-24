@@ -1,18 +1,30 @@
 #pragma once
 #include <list>
 #include "SimulationExecutive.h"
+#include "Computer.h"
+#include <iostream>
 
-class StatContainer
+class Computer;
+class Message;
+class StatsHolder
 {
 public:
-	StatContainer();
-	void EnterN();
-	void LeaveN();
-	void EnterQ();
-	void LeaveQ();
+	StatsHolder(){}
 
+	Computer* addPC(Computer* c)
+	{
+		PCList.push_back(c);
+		return c;
+	}
+	Message* addMSG(Message* m)
+	{
+		MSGList.push_back(m);
+		return m;
+	}
+	void ReportStats();
 private:
-	Time _start, _end, _enterQ, _exitQ;
-	std::list<Time> _TinNode;
-	std::list<Time> _QueueT;
+	std::list<Computer*> PCList;
+	std::list<Computer*>::iterator PCItr;
+	std::list<Message*> MSGList;
+	std::list<Message*>::iterator MSGItr;
 };
