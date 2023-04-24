@@ -2,6 +2,7 @@
 #include <list>
 #include "SimulationExecutive.h"
 #include "Computer.h"
+#include <iostream>
 
 class Computer;
 class Message;
@@ -9,13 +10,16 @@ class StatsHolder
 {
 public:
 	StatsHolder(){}
-	void addPC(Computer* c)
+
+	Computer* addPC(Computer* c)
 	{
 		PCList.push_back(c);
+		return c;
 	}
-	void addMSG(Message* m)
+	Message* addMSG(Message* m)
 	{
 		MSGList.push_back(m);
+		return m;
 	}
 	void ReportStats();
 private:

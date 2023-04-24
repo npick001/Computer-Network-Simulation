@@ -8,7 +8,7 @@
 #include <vector>
 
 class Network;
-
+class StatsHolder;
 struct DistributionValues {
     DistributionValues();
     DistributionValues(double min, double mode, double max, double genRate, int numEdges);
@@ -30,10 +30,17 @@ public:
     int GetQueueSize();
     void ReportStatistics();
     int getId() const;
-
+    void setStat( StatsHolder* st);
+    bool operator<(const Computer& c) const { return _id < c._id; }
+    Time getAvgTime();
+    double getUsage();
     std::vector<int> _edges;
     void SetMyValues(double min, double mode, double max, double genRate, int numEdges);
     DistributionValues myValues;
+    FIFO<Message>* _serviceQueue;
+
+    
+    int test = 123;
 private:
     // Event methods
     class GenerateMessageEA;
@@ -54,9 +61,11 @@ private:
     Exponential* _msgGenRateDist;
     int _id;
     int _connectedEdges;
-    FIFO<Message>* _serviceQueue;
     bool _busy;
     bool _reserved;
     int _numGen;
     static Network* _computerNetwork;
+    StatsHolder* _st;
+    Time _totalService;
+    int _numServed;
 };

@@ -4,20 +4,19 @@
 
 void StatsHolder::ReportStats()
 {
-	MSGList.sort();
 	MSGItr = MSGList.begin();
-	PCList.sort();
 	PCItr = PCList.begin();
-	for (int i = 0; i < PCList.size(); i++)
+	for (int i = 0; i < PCList.size() - 1; i++)
 	{
 		std::cout
 			<< "Computer Statistics:\n"
-			<< "Computer " << (*PCItr)->getId() << ":"
+			<< "Computer " << PCList.front()->getId() << ":"
 			<< "\n	Average Processing Time:" << (*PCItr)->getAvgTime()
-			<< "\n  Utilization:" << (*PCItr)->getUsage() 
+			<< "\n  Utilization:" << (*PCItr)->getUsage()
 			<< "\n		Queue Stats:"
-			<< "\n			Average Queue Time: " << (*PCItr)->GetFIFO()->getAvgTime()
-			<< "\n			Average Queue Size: " << (*PCItr)->GetFIFO()->getAvgSize()
-			<< "\n			Max Queue Size: " << (*PCItr)->GetFIFO()->getMax();
+			<< "\n			Average Queue Time: " << (*PCItr)->_serviceQueue->getAvgTime()
+			<< "\n			Average Queue Size: " << (*PCItr)->_serviceQueue->getAvgSize() << std::endl;
+			//<< "\n			Max Queue Size: " << (*PCItr)->_serviceQueue->getMax();
+		PCItr++;
 	}
 }

@@ -17,6 +17,26 @@ public:
 		_tail = 0;
 		_size = 0;
 		_name = name;
+		_total = 0;
+		_max = 0;
+		_cdfWaits = 0;
+	}
+
+	Time getAvgTime()
+	{
+		if (_total == 0) return 0;
+		else return _cdfWaits / _total;
+	}
+
+	double getAvgSize()
+	{
+		if (_total == 0) return 0;
+		else return _sumSizes / _total;
+	}
+
+	int getMax()
+	{
+		return _max;
 	}
 
 	void AddEntity(T* t)
@@ -29,9 +49,15 @@ public:
 			_tail = _tail->next = node;
 		}
 
-		std::cout << SimulationExecutive::GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+		std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
-		std::cout << SimulationExecutive::GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+		if (_size > _max)
+		{
+			_max = _size;
+		}
+		_total++;
+		std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
+		((Message*)t)->EnterQ(GetSimulationTime());
 	}
 
 	T* GetEntity()
@@ -43,10 +69,11 @@ public:
 			_head = _head->next;
 			//			delete n;
 
-			std::cout << SimulationExecutive::GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+			std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
-			std::cout << SimulationExecutive::GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
-
+			std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
+			_cdfWaits += ((Message*)t)->LeaveQ(GetSimulationTime());
+			_sumSizes += _size;
 			return t;
 		}
 	}
@@ -71,6 +98,7 @@ private:
 
 	Node* _head;
 	Node* _tail;
-	int _size;
+	int _size, _max, _count, _cdfWaits, _total, _sumSizes;
+	Time total;
 	std::string _name;
 };

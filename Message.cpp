@@ -1,36 +1,36 @@
 #include "Message.h"
 #include "Computer.h"
+int Message::NextID = 0;
 
 Message::Message(Computer* source, Computer* destination, Time creationTime)
 {
+	_id = NextID++;
 	_source = source;
 	_destination = destination;
 	_creationTime = creationTime;
 	_destinationTime = -1;
 	_waitTime = 0;
 	_timesStopped = 0;
+	_enterQ = 0;
+	_exitQ = 0;
 }
 
 Message::~Message()
 {
 }
 
-void Message::updateWaitTime(Time waitTime)
+void Message::EnterQ(Time eq)
 {
-    _waitTime += waitTime;
-    _timesStopped++;
+	_enterQ = eq;
 }
 
-void Message::reportStatistics() const
+Time Message::LeaveQ(Time lq)
 {
-    std::cout << "Message statistics:" << std::endl;
-    std::cout << "  Source: " << _source << std::endl;
-    std::cout << "  Destination: " << _destination << std::endl;
-    std::cout << "  Creation time: " << _creationTime << std::endl;
-    std::cout << "  Destination time: " << _destinationTime << std::endl;
-    std::cout << "  Wait time: " << _waitTime << std::endl;
-    std::cout << "  Times stopped: " << _timesStopped << std::endl;
+	_exitQ = lq;
+	_waitTime += (_exitQ - _enterQ);
+	return (_exitQ - _enterQ);
 }
+
 
 Computer* Message::getSource() const
 {

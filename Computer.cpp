@@ -120,6 +120,21 @@ Computer::Computer(Triangular* serviceTimeDist, Exponential* msgGenRateDist, con
     _numGen = 5;
 }
 
+void Computer::setStat(StatsHolder* st)
+{
+    _st = st;
+}
+
+Time Computer::getAvgTime()
+{
+    return _totalService / _numServed;
+}
+
+double Computer::getUsage()
+{
+    return _totalService / GetSimulationTime();
+}
+
 void Computer::SetNetwork(Network* network) {
     _computerNetwork = network;
 }
@@ -172,7 +187,8 @@ void Computer::StartServiceEM() {
         int finalDestination = message->getDestination()->getId();
         if (finalDestination == _id) {
             std::cout << "Time: " << GetSimulationTime() << "\tdeleting" << " Message when " << GetSimulationTime() + serviceTime << std::endl;
-            delete message;
+            _st->addMSG(message);
+            message->setEnd(GetSimulationTime());
 
         }
         else {
@@ -200,7 +216,6 @@ void Computer::DoneServiceEM(Message* message) {
 
     _busy = false;
     std::cout << "Time: " << GetSimulationTime() << "Computer " << _id << "\tDone Service." << " at " << GetSimulationTime() << std::endl;
-
     if ((this->GetQueueSize() > 0) && (!_reserved)) {
         ScheduleEventIn(0.0, new StartServiceEA(this));
     }

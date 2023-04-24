@@ -20,6 +20,10 @@ void Network::ReadFile(std::string filename) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
 }
+void Network::SetStats(StatsHolder* st)
+{
+    _st = st;
+}
 
 int Network::GetEdgeWeight(Computer* computer) {
     return computer->GetQueueSize();
@@ -27,6 +31,7 @@ int Network::GetEdgeWeight(Computer* computer) {
 
 void Network::addNode(Computer node) {
     nodes.push_back(node);
+    _st->addPC(&node);
 }
 
 bool Network::is_valid_node_index(int index, int num_nodes) {
@@ -122,6 +127,7 @@ void Network::parseGraphFromFile(const std::string& filename) {
         //std::cout << min << ", " << mode << ", " << max << std::endl;
         Exponential* msgGenRateDist = new Exponential(msg_gen_rate);
         Computer computer(serviceTimeDist, msgGenRateDist, edges, node_id);
+        computer.setStat(_st);
         computer.SetMyValues(min, mode, max, msg_gen_rate, num_edges);
         addNode(computer);
         computer.SetNetwork(this);
