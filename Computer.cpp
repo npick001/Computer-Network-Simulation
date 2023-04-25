@@ -15,6 +15,9 @@ DistributionValues::DistributionValues()
     _numEdges = -1;
 }
 
+
+
+
 DistributionValues::DistributionValues(double min, double mode, double max, double genRate, int numEdges)
 {
     _min = min;
@@ -27,6 +30,9 @@ DistributionValues::DistributionValues(double min, double mode, double max, doub
 int Computer::GetQueueSize() {
     return _serviceQueue->GetSize();
 }
+
+
+
 
 class Computer::GenerateMessageEA : public EventAction
 {
@@ -41,6 +47,10 @@ public:
 private:
     Computer* _c;
 };
+
+
+
+
 class Computer::ArriveEA : public EventAction
 {
 public:
@@ -56,6 +66,10 @@ private:
     Computer* _c;
     Message* _m;
 };
+
+
+
+
 class Computer::StartServiceEA : public EventAction
 {
 public:
@@ -70,6 +84,9 @@ private:
     Computer* _c;
 
 };
+
+
+
 class Computer::DoneServiceEA : public EventAction
 {
 public:
@@ -85,6 +102,10 @@ private:
     Computer* _c;
     Message* _m;
 };
+
+
+
+
 
 class Computer::SendMessageEA : public EventAction
 {
@@ -102,6 +123,10 @@ private:
     Message* _m;
 };
 
+
+
+
+
 Computer::Computer(Triangular* serviceTimeDist, Exponential* msgGenRateDist, const std::vector<int>& edges, int id)
 {
     _serviceTimeDist = serviceTimeDist;
@@ -116,33 +141,55 @@ Computer::Computer(Triangular* serviceTimeDist, Exponential* msgGenRateDist, con
     _numGen = 5;
 }
 
+
+
+
+
 void Computer::setStat(StatsHolder* st)
 {
     _st = st;
 }
+
+
+
+
 
 Time Computer::getAvgTime()
 {
     return _totalService / _numServed;
 }
 
+
+
+
 double Computer::getUsage()
 {
     return (_totalService / GetSimulationTime())*100;
 }
 
+
+
+
 void Computer::SetNetwork(Network* network) {
     _computerNetwork = network;
 }
+
+
+
 
 void Computer::Begin() {
     ScheduleEventAt(0.0, new GenerateMessageEA(this));
 }
 
+
+
+
 void Computer::Arrive(Message* message)
 {
     ScheduleEventIn(0.0, new ArriveEA(this, message));
 }
+
+
 
 void Computer::GenerateMessageEM()
 {
@@ -159,13 +206,16 @@ void Computer::GenerateMessageEM()
 
     // use path to determine where it is going.
     ProcessMessage(message);
-#if SIM_OUTPUT
-    std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": sending to Computer " << message->getDestination()->getId() << "." << std::endl;
-#endif // SIM_OUTPUT
+    #if SIM_OUTPUT
+        std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": sending to Computer " << message->getDestination()->getId() << "." << std::endl;
+    #endif // SIM_OUTPUT
 
     ScheduleEventIn(genTime, new SendMessageEA(this, message));
     ScheduleEventIn(genTime, new GenerateMessageEA(this));
 };
+
+
+
 
 void Computer::StartServiceEM() {
 
@@ -174,18 +224,17 @@ void Computer::StartServiceEM() {
 
     if (!_serviceQueue->IsEmpty()) {
         Message* message = _serviceQueue->GetEntity();
-#if SIM_OUTPUT
-        std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": Start Service." << std::endl;
-#endif // SIM_OUTPUT
+        #if SIM_OUTPUT
+            std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": Start Service." << std::endl;
+        #endif // SIM_OUTPUT
 
         Time serviceTime = _serviceTimeDist->GetRV();
         _totalService += serviceTime;
         int finalDestination = message->getDestination()->getId();
         if (finalDestination == _id) {
-#if SIM_OUTPUT
-            std::cout << "Time: " << GetSimulationTime() << " deleting" << " Message when " << GetSimulationTime() + serviceTime << std::endl;
-#endif // SIM_OUTPUT
-
+            #if SIM_OUTPUT
+                std::cout << "Time: " << GetSimulationTime() << " deleting" << " Message when " << GetSimulationTime() + serviceTime << std::endl;
+            #endif // SIM_OUTPUT
             _st->addMSG(message);
             message->setEnd(GetSimulationTime());
         }
@@ -196,6 +245,9 @@ void Computer::StartServiceEM() {
         ScheduleEventIn(serviceTime, new DoneServiceEA(this, _serviceQueue->GetEntity()));
     }
 }
+
+
+
 void Computer::ArriveEM(Message* message) {
     _numServed++;
     _serviceQueue->AddEntity(message);
@@ -204,56 +256,66 @@ void Computer::ArriveEM(Message* message) {
         ScheduleEventIn(0.0, new StartServiceEA(this));
     }
 }
+
+
+
+
 void Computer::DoneServiceEM(Message* message) {
 
     _busy = false;
-#if SIM_OUTPUT
-    std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": Done Service." << std::endl;
-#endif // SIM_OUTPUT
-
+    #if SIM_OUTPUT
+        std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << ": Done Service." << std::endl;
+    #endif // SIM_OUTPUT
     if ((this->GetQueueSize() > 0) && (!_reserved)) {
         ScheduleEventIn(0.0, new StartServiceEA(this));
     }
 }
 
+
+
 //router
 void Computer::ProcessMessage(Message* message) {
-    int finalDestination = message->getDestination()->getId();
+    int finalDestination = message->getDestination()->getId();                                      
     std::vector<int> prev;
-    if (_computerNetwork->routing_algorithm == RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA) {
-        prev = _computerNetwork->equal_weight_dijkstra(_id);
+    if (_computerNetwork->routing_algorithm == RoutingAlgorithm::EQUAL_WEIGHT_DIJKSTRA) {           
+        prev = _computerNetwork->equal_weight_dijkstra(_id);                                        
     }
     else {
-        prev = _computerNetwork->weighted_shortest_path(_id);
+        prev = _computerNetwork->weighted_shortest_path(_id);                                       
     }
-    std::vector<int> path = _computerNetwork->getShortestPath(_id, finalDestination, prev);
-    // If the path exists, update the message's destination to the next node in the path
+    std::vector<int> path = _computerNetwork->getShortestPath(_id, finalDestination, prev);         
+                                                                                                    
     if (path.size() >= 1) {
-        int nextDestinationId = path[1];
-        _nextComputer = &_computerNetwork->nodes[nextDestinationId];
-        // Route the message to the next computer in the network
-#if SIM_OUTPUT
+        int nextDestinationId = path[1];                                                            
+        _nextComputer = &_computerNetwork->nodes[nextDestinationId];                                
+        #if SIM_OUTPUT
         std::cout << "Routing message from node " << _id << " to node " << nextDestinationId << std::endl;
-#endif // SIM_OUTPUT
+        #endif // SIM_OUTPUT
     }
     else {
-#if SIM_OUTPUT
+        #if SIM_OUTPUT
         std::cout << "No path exists between node " << _id << " and node " << finalDestination << std::endl;
-#endif // SIM_OUTPUT
+        #endif // SIM_OUTPUT
     }
 }
+
+
 
 void Computer::SendMessageEM(Message* message)
 {
 #if SIM_OUTPUT
     std::cout << "Time: " << GetSimulationTime() << " Computer " << _id << " sending to " << message->getDestination()->getId() << std::endl;
 #endif // SIM_OUTPUT
-    _nextComputer->Arrive(message);
+    _nextComputer->Arrive(message);                                                                 
 }
+
+
 
 int Computer::getId() const {
     return _id;
 }
+
+
 
 void Computer::SetMyValues(double min, double mode, double max, double genRate, int numEdges)
 {
