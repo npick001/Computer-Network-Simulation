@@ -22,12 +22,12 @@ public:
 		_cdfWaits = 0;
 	}
 
-	double getAvgTime()
+	double getAvgTime()						//Returns sum of waits over number of processed messages
 	{
 		return _cdfWaits / _total;
 	}
 
-	double getAvgSize()
+	double getAvgSize()						//Returns sum of all queue sizes over number of processed messages
 	{
 		double temp = (_sumSizes / _total);
 		return temp;
@@ -50,13 +50,13 @@ public:
 
 		//std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
 		_size++;
-		if (_size > _max)
+		if (_size > _max) //if the current size is larger than the current max, increase max to curent size
 		{
 			_max = _size;
 		}
 		_total++;
 		//std::cout << GetSimulationTime() << ", queue, " << _name << ", AddEntity, Entity , queue size, " << _size << std::endl;
-		((Message*)t)->EnterQ(GetSimulationTime());
+		((Message*)t)->EnterQ(GetSimulationTime()); //Marks enterQ in message
 	}
 
 	T* GetEntity()
@@ -71,8 +71,8 @@ public:
 			//std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
 			_size--;
 		//	std::cout << GetSimulationTime() << ", queue, " << _name << ", GetEntity, Entity , queue size, " << _size << std::endl;
-			_cdfWaits += ((Message*)t)->LeaveQ(GetSimulationTime());
-			_sumSizes += _size;
+			_cdfWaits += ((Message*)t)->LeaveQ(GetSimulationTime()); //Marks exitQ time on message and adds it to the sum of wait times.
+			_sumSizes += _size;										 //Captures current queue size for average size stat
 			return t;
 		}
 	}
@@ -98,7 +98,7 @@ private:
 	Node* _head;
 	Node* _tail;
 	int _size, _max, _count, _sumSizes;
-	double  _total;
+	double  _total;						//This should only ever be a whole number, but it is a double to avoid integer division error when trying to return double above
 	Time total, _cdfWaits;
 	std::string _name;
 };

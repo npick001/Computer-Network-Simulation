@@ -7,7 +7,7 @@
 using namespace std;
 
 void main() {
-	StatsHolder* sh = new StatsHolder;
+	StatsHolder* sh = new StatsHolder; //Instantiate StatHolder
 
 	Time endTime = 1000;
 	InitializeSimulation();
@@ -21,6 +21,6 @@ void main() {
 
 	RunSimulation(endTime);
 
-	network.addNodestoStat();
-	sh->ReportStats();
+	network.addNodestoStat();	//Adds all computers in the network to the StatHolder
+	sh->ReportStats();			//Display Fn
 }

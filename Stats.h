@@ -4,9 +4,10 @@
 #include "Computer.h"
 #include <iostream>
 
-class Computer;
+class Computer;			//Forward Declarations
 class Message;
-class StatsHolder
+
+class StatsHolder		//Container that stores objects for analysis and output
 {
 public:
 	StatsHolder(){}
@@ -21,10 +22,10 @@ public:
 		MSGList.push_back(m);
 		return m;
 	}
-	void ReportStats();
+	void ReportStats();						//Display Fn
 private:
-	std::list<Computer*> PCList;
+	std::list<Computer*> PCList;			//List of computers to be reported
 	std::list<Computer*>::iterator PCItr;
-	std::list<Message*> MSGList;
+	std::list<Message*> MSGList;			//List of messages to be reported
 	std::list<Message*>::iterator MSGItr;
 };
