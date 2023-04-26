@@ -3,110 +3,66 @@
 
 using namespace std;
 
-struct SimulationExecutive::Event
+
+struct Event
 {
-	Event(Time time, EventAction *ea)
+	Event(Time time, EventAction* ea)
 	{
 		_time = time;
 		_ea = ea;
-		_nextEvent = 0;
+		_nextEvent = NULL;
 	}
 	Time _time;
-	EventAction *_ea;
-	Event *_nextEvent;
+	EventAction* _ea;
+	Event* _nextEvent;
 };
 
-class SimulationExecutive::EventSet
+
+
+class SimulationExecutive
 {
 public:
-	EventSet()
+	static void InitializeSimulation()
 	{
-		_numBins = 10;
-		_deltaT = 1;
-		_calQueue = new EventList*[_numBins];
+		_simTime = 0.0;
+	}
 
-		// instantiate a number of lists and save in a single array
-		for (int i = 0; i < _numBins; i++) {
-			_calQueue[i] = new EventList();
+	static Time GetSimulationTime() { return _simTime; }
+	static void RunSimulation()
+	{
+		while (_eventList.HasEvent()) {
+			Event* e = _eventList.GetEvent();
+			_simTime = e->_time;
+			e->_ea->Execute();
+			delete e;
 		}
 	}
 
-	void AddEvent(Time time, EventAction *ea)
+	static void RunSimulation(Time endTime)
 	{
-		int index = GetIndex(time);
-		_calQueue[index]->AddEvent(time, ea);
-	}
-
-	// this function assumes that the set has an event
-	Time GetTime()
-	{
-		int index = GetIndex(_simTime);
-		 
-		// check all bins if they have an event, starting at this bin
-		for (int i = index; i < _numBins + index; i++) {
-			i = i % _numBins;
-			if (_calQueue[i]->HasEvent()) {
-				index = i;
-				break;
+		while (_eventList.HasEvent() && _simTime <= endTime) {
+			Event* e = _eventList.GetEvent();
+			_simTime = e->_time;
+			if (_simTime <= endTime) {
+				e->_ea->Execute();
 			}
+			delete e;
 		}
-		return _calQueue[index]->GetMinTime();
 	}
 
-	// this function assumes the set has an event
-	EventAction *GetEventAction()
+	static void ScheduleEventIn(Time delta, EventAction* ea)
 	{
-		int index = GetIndex(GetTime());
-		return _calQueue[index]->GetEventEA();
+		_eventList.AddEvent(_simTime + delta, ea);
 	}
 
-	bool HasEvent()
+	static void ScheduleEventAt(Time time, EventAction* ea)
 	{
-		// loop thru each list and see if any of them have an event
-		// if they do have an event, then break out.
-		// if none of them return true, then there are no events in the whole list.
-		for (int i = 0; i < _numBins; i++) {
-			if (_calQueue[i]->HasEvent()) {
-				return true;
-				break;
-			}
-		}
-		return false;
+		_eventList.AddEvent(time, ea);
 	}
 
-	// function for testing different bin sizes through the batch file.
-	void SetDeltaT(Time t) {
-		_deltaT = t;
-	}
 
-	// function for testing different number of bins through batch file
-	void SetNumBins(int numBins) {
-		for (int i = 0; i < _numBins; i++) {
-			delete _calQueue[i];
-		}
-		_numBins = numBins;
-		
-		// after changing number of bins, delete set and create new.
-		delete[] _calQueue;
-		_calQueue = new EventList * [_numBins];
-
-		// instantiate a number of lists and save in a single array
-		for (int i = 0; i < _numBins; i++) {
-			_calQueue[i] = new EventList();
-		}
-	}
-
-	// DEBUGGING FUNCTION
-	void PrintEventLists() {
-		for (int i = 0; i < _numBins; i++) {
-			if (_calQueue[i]->HasEvent()) {
-				std::cout << "Printing Index:" << i << std::endl << std::endl;
-				_calQueue[i]->PrintEventList();
-				std::cout << std::endl << std::endl;
-			}
-		}
-	}
 private:
+
 	class EventList
 	{
 	public:
@@ -117,124 +73,94 @@ private:
 
 		void AddEvent(Time time, EventAction* ea)
 		{
-			Event* e = new Event(time, ea);
+			Event* em = new Event(time, ea);
 			if (_eventList == 0) {
 				//event list empty
-				_eventList = e;
+				_eventList = em;
 			}
 			else if (time < _eventList->_time) {
 				//goes at the head of the list
-				e->_nextEvent = _eventList;
-				_eventList = e;
+				em->_nextEvent = _eventList;
+				_eventList = em;
 			}
 			else {
 				//search for where to put the event
 				Event* curr = _eventList;
-				while ((curr->_nextEvent != 0) ? (e->_time >= curr->_nextEvent->_time) : false) {
+
+				while ((curr->_nextEvent != 0) ? (em->_time >= curr->_nextEvent->_time) : false) {
 					curr = curr->_nextEvent;
 				}
 				if (curr->_nextEvent == 0) {
 					//goes at the end of the list
-					curr->_nextEvent = e;
+					curr->_nextEvent = em;
 				}
 				else {
-					e->_nextEvent = curr->_nextEvent;
-					curr->_nextEvent = e;
+					em->_nextEvent = curr->_nextEvent;
+					curr->_nextEvent = em;
 				}
 			}
 		}
 
-		Time GetMinTime() {
-			return _eventList->_time;
-		}
 
-		EventAction* GetEventEA()
+		Event* GetEvent()
 		{
 			Event* next = _eventList;
 			_eventList = _eventList->_nextEvent;
-			return next->_ea;
+			return next;
 		}
-
 		bool HasEvent()
 		{
 			return _eventList != 0;
 		}
-
-		// THIS NEEDS TO REMAIN PRIVATE FOR SUBMISSIONS
 		void PrintEventList()
 		{
 			Event* e = _eventList;
 			cout << "     EventList: " << endl;;
 			while (e != NULL) {
-				cout << "          " << e << ", " << e->_time << ", " << e->_ea << endl;
+				cout << "          " << e << ", " << e->_time << ", " << e->_ea << ", " << endl;
 				e = e->_nextEvent;
 			}
 		}
 	private:
 		Event* _eventList;
+
+
 	};
 
-	int GetIndex(Time t) {
-		return ((int)(t / _deltaT) % _numBins);
-	}
-
-	int _numBins;
-	double _deltaT;
-	EventList** _calQueue;
+	static EventList _eventList;
+	static Time _simTime;
 };
 
-SimulationExecutive::EventSet SimulationExecutive::_eventSet;
+SimulationExecutive::EventList SimulationExecutive::_eventList;
 Time SimulationExecutive::_simTime = 0.0;
 
-void SimulationExecutive::InitializeSimulation()
+void InitializeSimulation()
 {
-	_simTime = 0.0;
-	_eventSet = SimulationExecutive::EventSet();
+	SimulationExecutive::InitializeSimulation();
 }
 
-Time SimulationExecutive::GetSimulationTime() 
-{ 
-	return _simTime; 
-}
-
-void SimulationExecutive::RunSimulation()
+Time GetSimulationTime()
 {
-	while (_eventSet.HasEvent()) {
-		_simTime = _eventSet.GetTime();
-		EventAction *ea = _eventSet.GetEventAction();
-		ea->Execute();
-		delete ea;
-	}
+	return SimulationExecutive::GetSimulationTime();
 }
 
-void SimulationExecutive::RunSimulation(Time endTime)
+void RunSimulation()
 {
-	while (_eventSet.HasEvent() && _simTime <= endTime) {
-		_simTime = _eventSet.GetTime();
-		EventAction *ea = _eventSet.GetEventAction();
-		ea->Execute();
-
-		//_eventSet.PrintEventLists();
-
-		delete ea;
-	}
+	SimulationExecutive::RunSimulation();
 }
 
-void SimulationExecutive::ScheduleEventIn(Time delta, EventAction *ea)
+void RunSimulation(Time endTime)
 {
-	_eventSet.AddEvent(_simTime + delta, ea);
+	SimulationExecutive::RunSimulation(endTime);
 }
 
-void SimulationExecutive::ScheduleEventAt(Time time, EventAction *ea)
+void ScheduleEventIn(Time delta, EventAction* ea)
 {
-	_eventSet.AddEvent(time, ea);
+	SimulationExecutive::ScheduleEventIn(delta, ea);
 }
 
-void SimulationExecutive::SetBinSize(Time t)
+void ScheduleEventAt(Time time, EventAction* ea)
 {
-	_eventSet.SetDeltaT(t);
+	SimulationExecutive::ScheduleEventAt(time, ea);
 }
 
-void SimulationExecutive::SetNumBins(int NumBins) {
-	_eventSet.SetNumBins(NumBins);
-}

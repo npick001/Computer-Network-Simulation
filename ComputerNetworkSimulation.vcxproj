@@ -18,6 +18,29 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Computer.h" />
+    <ClInclude Include="Distribution.h" />
+    <ClInclude Include="EventSet.h" />
+    <ClInclude Include="FIFO.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="SimulationExecutive.h" />
+    <ClInclude Include="Stats.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="foo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Computer.cpp" />
+    <ClCompile Include="Distribution.cpp" />
+    <ClCompile Include="EventSet.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="Network.cpp" />
+    <ClCompile Include="SimulationExecutive.cpp" />
+    <ClCompile Include="Stats.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -126,24 +149,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Computer.cpp" />
-    <ClCompile Include="Distribution.cpp" />
-    <ClCompile Include="EventSet.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Message.cpp" />
-    <ClCompile Include="Network.cpp" />
-    <ClCompile Include="SimulationExecutive.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Computer.h" />
-    <ClInclude Include="Distribution.h" />
-    <ClInclude Include="EventSet.h" />
-    <ClInclude Include="FIFO.h" />
-    <ClInclude Include="Message.h" />
-    <ClInclude Include="Network.h" />
-    <ClInclude Include="SimulationExecutive.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
